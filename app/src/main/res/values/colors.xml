@@ -3,4 +3,22 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- AppTheme.NoActionBar -->
+    <color name="color_control_normal">#8ec3d9</color>
+
+    <!-- Toolbar -->
+    <color name="color_toolbar_title">#cccccc</color>
+    <color name="color_toolbar_subtitle">#cccccc</color>
+    <color name="color_toolbar_background">#17191f</color>
+
+    <!-- Navigation View -->
+    <color name="color_navigation_view_item_selected">#3d4041</color>
+
+    <!-- Item Track List -->
+    <color name="color_item_track_list_text">#99999c</color>
+
+    <!-- Divider -->
+    <color name="color_divider">#2d2c35</color>
+
 </resources>

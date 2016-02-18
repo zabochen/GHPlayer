@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_navigation_view_item_navigation"
+        android:title="@string/menu_navigation_view_item_navigation">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/menu_navigation_view_item_tracks"
+                    android:icon="@android:drawable/ic_dialog_email"
+                    android:title="@string/menu_navigation_view_item_tracks" />
+
+                <item
+                    android:id="@+id/menu_navigation_view_item_albums"
+                    android:icon="@android:drawable/ic_dialog_email"
+                    android:title="@string/menu_navigation_view_item_albums" />
+
+                <item
+                    android:id="@+id/menu_navigation_view_item_artists"
+                    android:icon="@android:drawable/ic_dialog_email"
+                    android:title="@string/menu_navigation_view_item_artists" />
+
+                <item
+                    android:id="@+id/menu_navigation_view_item_genres"
+                    android:icon="@android:drawable/ic_dialog_email"
+                    android:title="@string/menu_navigation_view_item_genres" />
+
+                <item
+                    android:id="@+id/menu_navigation_view_item_playlists"
+                    android:icon="@android:drawable/ic_dialog_email"
+                    android:title="@string/menu_navigation_view_item_playlists" />
+
+            </group>
+
+        </menu>
+
+    </item>
+
+</menu>

@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">GH Player</string>
+    <string name="app_name">GHPlayer</string>
+
+    <!-- Actionbar Drawer Toggle  -->
+    <string name="toggle_navigation_view_open">Open</string>
+    <string name="toggle_navigation_view_close">Close</string>
+
+    <!-- Menu Main -->
+    <string name="menu_main_sort">Sort</string>
+
+    <!-- Menu Navigation View -->
+    <string name="menu_navigation_view_item_navigation">Navigation</string>
+    <string name="menu_navigation_view_item_tracks">Tracks</string>
+    <string name="menu_navigation_view_item_albums">Albums</string>
+    <string name="menu_navigation_view_item_artists">Artists</string>
+    <string name="menu_navigation_view_item_genres">Genres</string>
+    <string name="menu_navigation_view_item_playlists">Playlists</string>
+
 </resources>

@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">GH Player</string>
+
+    <string name="app_name">GHPlayer</string>
+
+    <!-- Menu Main -->
+    <string name="menu_main_sort">Сортування</string>
+
+    <!-- Menu Navigation View -->
+    <string name="menu_navigation_view_item_albums">Альбоми</string>
+    <string name="menu_navigation_view_item_artists">Виконавці</string>
+    <string name="menu_navigation_view_item_genres">Жанри</string>
+    <string name="menu_navigation_view_item_navigation">Навігація</string>
+    <string name="menu_navigation_view_item_playlists">Списки</string>
+    <string name="menu_navigation_view_item_tracks">Треки</string>
+
 </resources>
