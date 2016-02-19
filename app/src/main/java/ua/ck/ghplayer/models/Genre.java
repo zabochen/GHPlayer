@@ -1,4 +1,4 @@
 package ua.ck.ghplayer.models;
 
-public class GenreItem {
+public class Genre {
 }
