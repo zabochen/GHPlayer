@@ -66,7 +66,7 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null) {
+        if (data != null && data.moveToFirst()){
             TrackList.getInstance().setTrackList(data);
             setTrackListAdapter();
         }

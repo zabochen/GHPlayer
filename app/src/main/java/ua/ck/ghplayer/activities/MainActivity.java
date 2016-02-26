@@ -2,6 +2,7 @@ package ua.ck.ghplayer.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,10 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.fragments.AlbumListFragment;
+import ua.ck.ghplayer.fragments.ArtistListFragment;
+import ua.ck.ghplayer.fragments.GenreListFragment;
+import ua.ck.ghplayer.fragments.PlaylistListFragment;
 import ua.ck.ghplayer.fragments.TrackListFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,19 +104,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setFragment() {
         // Activity Container & Fragment
         FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
-        TrackListFragment trackListFragment = new TrackListFragment();
+        Fragment listFragment = null;
+        Fragment optionalFragment =null;
+        //todo: add function for Boolean isLandscapeOrientedTablet
+        boolean isLandscapeOrientedTablet = false;
 
-        // Add Fragment
+
+        switch (navigationViewItemSelected) {
+            case R.id.menu_navigation_view_item_tracks:
+                TrackListFragment trackListFragment = new TrackListFragment();
+                listFragment = trackListFragment;
+                if(isLandscapeOrientedTablet){
+
+                }
+                break;
+            case R.id.menu_navigation_view_item_albums:
+                AlbumListFragment albumListFragment = new AlbumListFragment();
+                listFragment = albumListFragment;
+                if(isLandscapeOrientedTablet){
+
+                }
+                break;
+            case R.id.menu_navigation_view_item_artists:
+                ArtistListFragment artistListFragment = new ArtistListFragment();
+                listFragment = artistListFragment;
+                if(isLandscapeOrientedTablet){
+
+                }
+                break;
+            case R.id.menu_navigation_view_item_genres:
+                GenreListFragment genreListFragment = new GenreListFragment();
+                listFragment = genreListFragment;
+                if(isLandscapeOrientedTablet){
+
+                }
+                break;
+            case R.id.menu_navigation_view_item_playlists:
+                PlaylistListFragment playlistListFragment = new PlaylistListFragment();
+                listFragment = playlistListFragment;
+                if(isLandscapeOrientedTablet){
+
+                }
+                break;
+            default:
+                break;
+        }
+
+        // Add Fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(activityFrameLayout.getId(), trackListFragment)
-                .commit();
+
+        fragmentTransaction.replace(activityFrameLayout.getId(), listFragment);
+        if(isLandscapeOrientedTablet){
+            //fragmentTransaction.replace(, optionalFragment);
+        }
+        fragmentTransaction.commit();
+
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
         navigationViewItemSelected = item.getItemId();
+        setFragment();
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

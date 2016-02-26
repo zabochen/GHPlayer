@@ -4,21 +4,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-
 public class Album {
-
-    private int album_id;
-    private String album;
-    private String artist;
-    private int numsongs;
-    private int minyear;
-
-    // Constants
-    //String[] projection for ContentResolver.query
+    //Constants for Album query
     public static final String[] projection = {
-            MediaStore.Audio.Albums.ALBUM_ID,
+            MediaStore.Audio.Albums.ALBUM_KEY,
             MediaStore.Audio.Albums.ALBUM,
             MediaStore.Audio.Albums.ARTIST,
+            MediaStore.Audio.Albums.ALBUM_ART,
             MediaStore.Audio.Albums.NUMBER_OF_SONGS,
             MediaStore.Audio.Albums.FIRST_YEAR,
     };
@@ -26,32 +18,33 @@ public class Album {
     public static final Uri EXTERNAL_CONTENT_URI = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
     public static final Uri INTERNAL_CONTENT_URI = MediaStore.Audio.Albums.INTERNAL_CONTENT_URI;
 
-    public static final String ALBUM_ID ="album_id";
-    public static final String ALBUM ="album";
-    public static final String ARTIST ="artist";
-    public static final String NUMBER_OF_SONGS="numsongs";
-    public static final String FIRST_YEAR="minyear";
+    //Variables
+    private String albumKey;
+    private String album;
+    private String artist;
+    private String albumArt;
+    private int numberOfSongs;
+    private int firstYear;
 
-    Album(int album_id, String album, String artist, int numsongs, int minyear){
-        this.album_id = album_id;
+    public Album(String albumKey, String album, String artist, String albumArt, int numberOfSongs, int firstYear) {
+        this.albumKey = albumKey;
         this.album = album;
         this.artist = artist;
-        this.numsongs = numsongs;
-        this.minyear = minyear;
+        this.numberOfSongs = numberOfSongs;
+        this.firstYear = firstYear;
     }
 
-    public Album getAlbumItemFromCursor(Cursor data){
-        int album_id = data.getInt(data.getColumnIndexOrThrow(ALBUM_ID));
-        String album = data.getString(data.getColumnIndexOrThrow(ALBUM));
-        String artist = data.getString(data.getColumnIndexOrThrow(ARTIST));
-        int numsongs = data.getInt(data.getColumnIndexOrThrow(NUMBER_OF_SONGS));
-        int minyear = data.getInt(data.getColumnIndexOrThrow(FIRST_YEAR));
-
-        return new Album(album_id,album,artist,numsongs,minyear);
+    public Album(Cursor cursor) {
+        this.albumKey = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_KEY));
+        this.album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
+        this.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST));
+        this.albumArt = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART));
+        this.numberOfSongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
+        this.firstYear = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.FIRST_YEAR));
     }
 
-    public int getAlbum_id() {
-        return album_id;
+    public String getAlbumKey() {
+        return albumKey;
     }
 
     public String getAlbum() {
@@ -62,13 +55,16 @@ public class Album {
         return artist;
     }
 
-    public int getNumsongs() {
-        return numsongs;
+    public String getAlbumArt() {
+        return albumArt;
     }
 
-    public int getMinyear() {
-        return minyear;
+    public int getNumberOfSongs() {
+        return numberOfSongs;
     }
 
+    public int getFirstYear() {
+        return firstYear;
+    }
 
 }

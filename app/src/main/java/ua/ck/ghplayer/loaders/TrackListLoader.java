@@ -30,5 +30,4 @@ public class TrackListLoader extends CursorLoader {
         return cursor;
     }
 
-
 }
