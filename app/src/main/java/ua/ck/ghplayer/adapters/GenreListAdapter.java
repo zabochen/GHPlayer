@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.models.Genre;
 
-public class GenreListAdapter extends RecyclerView.Adapter<GenreListAdapter.GenreViewHolder>{
-    private ArrayList data;
+public class GenreListAdapter extends RecyclerView.Adapter<GenreListAdapter.GenreViewHolder> {
+    private ArrayList<Genre> data;
 
-    public GenreListAdapter(ArrayList data) {
+    public GenreListAdapter(ArrayList<Genre> data) {
         super();
         this.data = data;
     }
@@ -29,14 +29,14 @@ public class GenreListAdapter extends RecyclerView.Adapter<GenreListAdapter.Genr
 
     @Override
     public void onBindViewHolder(GenreListAdapter.GenreViewHolder holder, int position) {
-        Genre genre = (Genre)data.get(position);
+        Genre genre = data.get(position);
         //holder.cover.setImageBitmap();
         holder.name.setText(genre.getName());
     }
 
     @Override
     public int getItemCount() {
-        return data!=null?data.size():0;
+        return data != null ? data.size() : 0;
     }
 
     class GenreViewHolder extends RecyclerView.ViewHolder {

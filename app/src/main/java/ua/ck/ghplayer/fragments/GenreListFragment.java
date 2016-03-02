@@ -20,7 +20,7 @@ import ua.ck.ghplayer.adapters.GenreListAdapter;
 import ua.ck.ghplayer.lists.GenreList;
 import ua.ck.ghplayer.models.Genre;
 
-public class GenreListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class GenreListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_GENRE_LIST_LOADER = 4;
     RecyclerView genreListRecyclerView;
     GenreListAdapter genreListAdapter;

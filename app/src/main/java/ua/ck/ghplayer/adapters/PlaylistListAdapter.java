@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.models.Playlist;
 
-public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder>{
-    private ArrayList data;
+public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder> {
+    private ArrayList<Playlist> data;
 
-    public PlaylistListAdapter(ArrayList data) {
+    public PlaylistListAdapter(ArrayList<Playlist> data) {
         super();
         this.data = data;
     }
@@ -29,14 +29,14 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
     @Override
     public void onBindViewHolder(PlaylistListAdapter.PlaylistViewHolder holder, int position) {
-        Playlist playlist = (Playlist) data.get(position);
+        Playlist playlist = data.get(position);
         //holder.cover.setImageBitmap();
         holder.name.setText(playlist.getName());
     }
 
     @Override
     public int getItemCount() {
-        return data!=null?data.size():0;
+        return data != null ? data.size() : 0;
     }
 
 

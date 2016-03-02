@@ -13,9 +13,9 @@ import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.models.Album;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
-    private ArrayList data;
+    private ArrayList<Album> data;
 
-    public AlbumListAdapter(ArrayList data) {
+    public AlbumListAdapter(ArrayList<Album> data) {
         super();
         this.data = data;
     }
@@ -30,7 +30,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
 
     @Override
     public void onBindViewHolder(AlbumListAdapter.AlbumViewHolder holder, int position) {
-        Album album = (Album) data.get(position);
+        Album album = data.get(position);
         //holder.cover.setImageBitmap();
         holder.title.setText(album.getAlbum());
         holder.artist.setText(album.getArtist());
@@ -41,10 +41,10 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
 
     @Override
     public int getItemCount() {
-        return data!=null?data.size():0;
+        return data != null ? data.size() : 0;
     }
 
-    class AlbumViewHolder extends RecyclerView.ViewHolder{
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView title;
         public TextView artist;
@@ -54,11 +54,11 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
 
         public AlbumViewHolder(View itemView) {
             super(itemView);
-            this.cover=(ImageView) itemView.findViewById(R.id.item_album_list_cover);
-            this.title=(TextView) itemView.findViewById(R.id.item_album_list_album);
-            this.artist=(TextView) itemView.findViewById(R.id.item_album_list_artist);
-            this.firstYear =(TextView) itemView.findViewById(R.id.item_album_list_first_year);
-            this.numberOfSongs=(TextView) itemView.findViewById(R.id.item_album_list_number_of_songs);
+            this.cover = (ImageView) itemView.findViewById(R.id.item_album_list_cover);
+            this.title = (TextView) itemView.findViewById(R.id.item_album_list_album);
+            this.artist = (TextView) itemView.findViewById(R.id.item_album_list_artist);
+            this.firstYear = (TextView) itemView.findViewById(R.id.item_album_list_first_year);
+            this.numberOfSongs = (TextView) itemView.findViewById(R.id.item_album_list_number_of_songs);
         }
 
 

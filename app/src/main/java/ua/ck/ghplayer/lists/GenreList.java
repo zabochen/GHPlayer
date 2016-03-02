@@ -8,29 +8,30 @@ import ua.ck.ghplayer.models.Genre;
 
 public class GenreList {
     private static GenreList ourInstance = new GenreList();
-    private static ArrayList genreList = new ArrayList();
+    private static ArrayList<Genre> genreList = new ArrayList();
+
+    private GenreList() {
+    }
 
     public static GenreList getInstance() {
         return ourInstance;
     }
 
-    private GenreList() {
-    }
-
-    public void setGenreList(Cursor cursor) {
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            do{
-                genreList.add(new Genre(cursor));
-            }while(cursor.moveToNext());
-        }
-    }
-
-    public ArrayList getGenreList() {
+    public ArrayList<Genre> getGenreList() {
         return genreList;
     }
 
-    public void clearGenreList(){
+    public void setGenreList(Cursor cursor) {
+        clearGenreList();
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            do {
+                genreList.add(new Genre(cursor));
+            } while (cursor.moveToNext());
+        }
+    }
+
+    public void clearGenreList() {
         genreList.clear();
     }
 }

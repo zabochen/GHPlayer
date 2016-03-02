@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.models.Artist;
 
-public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder>{
-    private ArrayList data;
+public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder> {
+    private ArrayList<Artist> data;
 
-    public ArtistListAdapter(ArrayList data) {
+    public ArtistListAdapter(ArrayList<Artist> data) {
         super();
         this.data = data;
     }
@@ -29,7 +29,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
 
     @Override
     public void onBindViewHolder(ArtistListAdapter.ArtistViewHolder holder, int position) {
-        Artist artist = (Artist)data.get(position);
+        Artist artist = data.get(position);
         //holder.cover.setImageBitmap();
         holder.artist.setText(artist.getArtist());
         holder.numberOfAlbums.setText(String.valueOf(artist.getNumberOfAlbums()));
@@ -38,10 +38,10 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
 
     @Override
     public int getItemCount() {
-        return data!=null?data.size():0;
+        return data != null ? data.size() : 0;
     }
 
-    class ArtistViewHolder extends RecyclerView.ViewHolder{
+    class ArtistViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView artist;
         public TextView numberOfAlbums;

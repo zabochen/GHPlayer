@@ -8,29 +8,30 @@ import ua.ck.ghplayer.models.Artist;
 
 public class ArtistList {
     private static ArtistList ourInstance = new ArtistList();
-    private static ArrayList artistList = new ArrayList();
+    private static ArrayList<Artist> artistList = new ArrayList();
+
+    private ArtistList() {
+    }
 
     public static ArtistList getInstance() {
         return ourInstance;
     }
 
-    private ArtistList() {
-    }
-
-    public void setArtistList(Cursor cursor) {
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            do{
-                artistList.add(new Artist(cursor));
-            }while(cursor.moveToNext());
-        }
-    }
-
-    public ArrayList getArtistList() {
+    public ArrayList<Artist> getArtistList() {
         return artistList;
     }
 
-    public void clearArtistList(){
+    public void setArtistList(Cursor cursor) {
+        clearArtistList();
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            do {
+                artistList.add(new Artist(cursor));
+            } while (cursor.moveToNext());
+        }
+    }
+
+    public void clearArtistList() {
         artistList.clear();
     }
 
