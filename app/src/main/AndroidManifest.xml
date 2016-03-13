@@ -40,6 +40,10 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".services.MusicService"
+            android:enabled="true"/>
+
     </application>
 
 </manifest>

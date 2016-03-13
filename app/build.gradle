@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6'
 }

@@ -15,7 +15,7 @@
         <item name="android:windowBackground">@drawable/main_background</item>
         <!-- Navigation View Item  -->
         <item name="android:textColorSecondary">@color/color_toolbar_title</item>
-
+        <item name="alertDialogProTheme">@style/Theme.AlertDialogPro.Material.Light</item>
     </style>
 
     <style name="Divider">
@@ -23,5 +23,26 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/color_divider</item>
     </style>
+
+    <!-- Mini Player -->
+    <style name="activity_mini_player_buttons_style">
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+
+    </style>
+
+    <!-- Player -->
+    <style name="activity_player_duration_track">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/color_activity_player_duration_track_text</item>
+    </style>
+
+    <style name="activity_player_next_track">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/color_activity_player_next_track</item>
+    </style>
+
 
 </resources>

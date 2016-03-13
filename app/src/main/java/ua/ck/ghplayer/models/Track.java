@@ -3,22 +3,33 @@ package ua.ck.ghplayer.models;
 public class Track {
 
     // Fields
-    private String title;       // Type: TEXT, Constant Value: "title"
-    private String artist;      // Type: TEXT, Constant Value: "artist"
-    private String album;       // Type: TEXT, Constant Value: "album"
-    private long duration;      // Type: INTEGER (long), Constant Value: "duration"
+    private long id;            // Type: INTEGER (long), Constants Value: "_id"
+    private String title;       // Type: TEXT, Constants Value: "title"
+    private String artist;      // Type: TEXT, Constants Value: "artist"
+    private String album;       // Type: TEXT, Constants Value: "album"
+    private long duration;      // Type: INTEGER (long), Constants Value: "duration"
 
     // Constants
+    public static final String ID = "_id";
     public static final String TITLE = "title";
     public static final String ARTIST = "artist";
     public static final String ALBUM = "album";
     public static final String DURATION = "duration";
 
-    public Track(String title, String artist, String album, long duration) {
+    public Track(long id, String title, String artist, String album, long duration) {
+        this.id = id;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

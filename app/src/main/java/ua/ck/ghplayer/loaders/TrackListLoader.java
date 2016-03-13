@@ -12,11 +12,13 @@ public class TrackListLoader extends CursorLoader {
     private Context context;
     private Uri uriExternalContent = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private String[] projection = {
+            MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.DURATION
     };
+    private String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 ";
 
     public TrackListLoader(Context context) {
         super(context);
@@ -26,7 +28,7 @@ public class TrackListLoader extends CursorLoader {
     @Override
     public Cursor loadInBackground() {
         ContentResolver contentResolver = context.getContentResolver();
-        Cursor cursor = contentResolver.query(uriExternalContent, projection, null, null, null);
+        Cursor cursor = contentResolver.query(uriExternalContent, projection, selection, null, null);
         return cursor;
     }
 
