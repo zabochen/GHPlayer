@@ -44,3 +44,6 @@ captures/
 *.swp
 
 .DS_Store
+
+# Fabric configuration file
+/app/fabric.properties

@@ -45,8 +45,6 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         albumListRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_list_recycler_view);
         albumListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //RecyclerViewTouchListener albumListTouchListener = new RecyclerViewTouchListener(getContext(), this, albumListRecyclerView);
-        //albumListRecyclerView.addOnItemTouchListener(albumListTouchListener);
         albumListRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -66,8 +64,7 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         if (data != null && data.moveToFirst()) {
             AlbumList albumList = AlbumList.getInstance();
             albumList.setAlbumList(data);
-            albumListAdapter = new AlbumListAdapter(albumList.getAlbumList());
-
+            albumListAdapter = new AlbumListAdapter(getContext(), getActivity(), albumList.getAlbumList());
             albumListRecyclerView.setAdapter(albumListAdapter);
         }
 

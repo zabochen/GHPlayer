@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_marginBottom="10dp">
 
     <ImageView
@@ -37,12 +38,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" - " />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/item_album_list_first_year" />
+                android:id="@+id/item_album_list_first_year"
+                android:textColor="@color/color_item_track_list_text" />
 
         </LinearLayout>
 
@@ -53,15 +50,28 @@
             android:textColor="@color/color_item_track_list_text"
             android:textSize="12sp" />
 
-        <View style="@style/Divider" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/item_album_list_number_of_songs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_item_track_list_text"
-            android:textSize="12sp"
-            android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/item_album_list_number_of_songs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_item_track_list_text"
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" tracks"
+                android:textColor="@color/color_item_track_list_text" />
+
+        </LinearLayout>
+
+        <View style="@style/Divider" />
 
     </LinearLayout>
 

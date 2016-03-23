@@ -14,12 +14,22 @@
         android:layout_marginRight="20dp"
         android:layout_gravity="center_horizontal|center_vertical"/>
 
-    <TextView
-        android:id="@+id/item_genre_list_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_item_track_list_text"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:layout_gravity="top">
+
+        <TextView
+            android:id="@+id/item_genre_list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_item_track_list_text"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <View style="@style/Divider"
+            android:layout_width="match_parent" />
+    </LinearLayout>
 
 </LinearLayout>

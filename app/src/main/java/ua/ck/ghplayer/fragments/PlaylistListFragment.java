@@ -65,7 +65,7 @@ public class PlaylistListFragment extends Fragment implements LoaderManager.Load
         if (data != null && data.moveToFirst()) {
             PlaylistList playlistList = PlaylistList.getInstance();
             playlistList.setPlaylistList(data);
-            playlistListAdapter = new PlaylistListAdapter(playlistList.getPlaylistList());
+            playlistListAdapter = new PlaylistListAdapter(playlistList.getPlaylistList(), getActivity());
 
             playlistListRecyclerView.setAdapter(playlistListAdapter);
         }

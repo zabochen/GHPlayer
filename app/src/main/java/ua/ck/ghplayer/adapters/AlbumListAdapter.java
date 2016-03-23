@@ -1,5 +1,7 @@
 package ua.ck.ghplayer.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +9,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.models.Album;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
+    private Context context;
+    private Activity parentActivity;
     private ArrayList<Album> data;
 
-    public AlbumListAdapter(ArrayList<Album> data) {
+    public AlbumListAdapter(Context context, Activity parentActivity, ArrayList<Album> data) {
         super();
+        this.context = context;
+        this.parentActivity = parentActivity;
         this.data = data;
     }
 
@@ -31,10 +40,14 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
     @Override
     public void onBindViewHolder(AlbumListAdapter.AlbumViewHolder holder, int position) {
         Album album = data.get(position);
-        //holder.cover.setImageBitmap();
+        Picasso.with(context)
+                .load(album.getAlbumCoverUri())
+                        //.placeholder(R.drawable.album_placeholder)
+                .into(holder.cover);
         holder.title.setText(album.getAlbum());
         holder.artist.setText(album.getArtist());
-        holder.firstYear.setText(String.valueOf(album.getFirstYear()));
+        String firstYear = album.getFirstYear() > 0 ? " - " + String.valueOf(album.getFirstYear()) : "";
+        holder.firstYear.setText(firstYear);
         holder.numberOfSongs.setText(String.valueOf(album.getNumberOfSongs()));
 
     }
@@ -44,7 +57,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         return data != null ? data.size() : 0;
     }
 
-    class AlbumViewHolder extends RecyclerView.ViewHolder {
+    class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView cover;
         public TextView title;
         public TextView artist;
@@ -59,8 +72,15 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
             this.artist = (TextView) itemView.findViewById(R.id.item_album_list_artist);
             this.firstYear = (TextView) itemView.findViewById(R.id.item_album_list_first_year);
             this.numberOfSongs = (TextView) itemView.findViewById(R.id.item_album_list_number_of_songs);
+            itemView.setOnClickListener(this);
         }
 
-
+        @Override
+        public void onClick(View v) {
+            int position = getLayoutPosition();
+            Album album = data.get(position);
+            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) parentActivity;
+            itemClick.onAlbumListItemClick(album.getAlbum(), album.getId());
+        }
     }
 }
