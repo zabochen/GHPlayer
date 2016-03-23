@@ -6,15 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.lists.TrackList;
-import ua.ck.ghplayer.models.Track;
 
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyViewHolder> {
-
-    private ArrayList<Track> trackList = TrackList.getInstance().getTrackList();
 
     public TrackListAdapter() {
     }
@@ -28,14 +23,14 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.title.setText(trackList.get(position).getTitle());
-        holder.artist.setText(trackList.get(position).getArtist());
-        holder.album.setText(trackList.get(position).getAlbum());
+        holder.title.setText(TrackList.getInstance().getTrackList().get(position).getTitle());
+        holder.artist.setText(TrackList.getInstance().getTrackList().get(position).getArtist());
+        holder.album.setText(TrackList.getInstance().getTrackList().get(position).getAlbum());
     }
 
     @Override
     public int getItemCount() {
-        return this.trackList != null ? trackList.size() : 0;
+        return TrackList.getInstance().getTrackList() != null ? TrackList.getInstance().getTrackList().size() : 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -51,5 +46,4 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
             this.album = (TextView) itemView.findViewById(R.id.item_track_list_album);
         }
     }
-
 }

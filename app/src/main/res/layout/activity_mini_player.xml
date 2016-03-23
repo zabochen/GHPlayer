@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_mini_player_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@drawable/activity_mini_player_background">
+
+    <ImageView
+        android:id="@+id/activity_mini_player_red_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/activity_red_line_rotate" />
+
+    <ImageView
+        android:id="@+id/activity_mini_player_album_art"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/activity_mini_player_red_line"
+        android:layout_margin="5dp"
+        android:src="@drawable/cover" />
+
+    <TextView
+        android:id="@+id/activity_mini_player_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/activity_mini_player_album_art"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/activity_mini_player_album_art"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@color/color_activity_mini_player_track_title"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/activity_mini_player_album_art"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/activity_mini_player_album_art"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/activity_mini_player_button_previous"
+                style="@style/activity_mini_player_buttons_style"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/selector_player_button_previous" />
+
+            <Button
+                android:id="@+id/activity_mini_player_button_pause"
+                style="@style/activity_mini_player_buttons_style"
+                android:background="@drawable/selector_player_button_pause" />
+
+            <Button
+                android:id="@+id/activity_mini_player_button_stop"
+                style="@style/activity_mini_player_buttons_style"
+                android:background="@drawable/selector_player_button_stop" />
+
+            <Button
+                android:id="@+id/activity_mini_player_button_next"
+                style="@style/activity_mini_player_buttons_style"
+                android:background="@drawable/selector_player_button_next" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

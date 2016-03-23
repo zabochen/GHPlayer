@@ -21,4 +21,14 @@
     <!-- Divider -->
     <color name="color_divider">#2d2c35</color>
 
+    <!-- Mini Player -->
+    <color name="color_activity_mini_player_track_title">#9d9d9e</color>
+
+    <!-- Player -->
+    <color name="color_activity_player_duration_track_text">#9d9d9e</color>
+    <color name="color_activity_player_track_info_title">#dadada</color>
+    <color name="color_activity_player_track_info_artist">#dadada</color>
+    <color name="color_activity_player_track_info_album">#7b7b7e</color>
+    <color name="color_activity_player_next_track">#9d9d9e</color>
+
 </resources>

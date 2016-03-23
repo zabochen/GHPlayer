@@ -45,4 +45,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6'
 }

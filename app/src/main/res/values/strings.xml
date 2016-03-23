@@ -5,9 +5,6 @@
     <string name="toggle_navigation_view_open">Open</string>
     <string name="toggle_navigation_view_close">Close</string>
 
-    <!-- Menu Main -->
-    <string name="menu_main_sort">Sort</string>
-
     <!-- Menu Navigation View -->
     <string name="menu_navigation_view_item_navigation">Navigation</string>
     <string name="menu_navigation_view_item_tracks">Tracks</string>
@@ -15,5 +12,22 @@
     <string name="menu_navigation_view_item_artists">Artists</string>
     <string name="menu_navigation_view_item_genres">Genres</string>
     <string name="menu_navigation_view_item_playlists">Playlists</string>
+
+    <!-- Menu Fragment's -->
+    <string name="menu_fragments_sorting_title">Sorting</string>
+    <string name="menu_fragments_sorting_dialog_button_ascending">Ascending</string>
+    <string name="menu_fragments_sorting_dialog_button_descending">Descending</string>
+
+    <!-- Player -->
+    <string name="activity_player_duration_track_time_title">Track Time:</string>
+    <string name="activity_player_duration_track_elapsed_time_title">Elapsed Time:</string>
+    <string name="activity_player_next_track">Next Track:</string>
+
+    <!-- Menu Dialog TrackList Fragment -->
+    <string-array name="menu_fragment_track_list_sorting_dialog">
+        <item>Album Name</item>
+        <item>Artist Name</item>
+        <item>Track Name</item>
+    </string-array>
 
 </resources>

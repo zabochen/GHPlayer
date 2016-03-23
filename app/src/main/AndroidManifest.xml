@@ -41,9 +41,14 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".services.MusicService"
+            android:enabled="true" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b43dd302665f72019ff4b4cde0b7d8cb65787033" />
+
     </application>
 
 </manifest>

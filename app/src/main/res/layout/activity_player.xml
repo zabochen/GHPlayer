@@ -1,12 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_main_margin_bottom"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_main_margin_top"
-    tools:context="ua.ck.ghplayer.activities.PlayerActivity">
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <!-- Top Red Line -->
+
+    <ImageView
+        android:id="@+id/activity_player_top_red_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/activity_red_line" />
+
+    <!-- Album Art Container -->
+
+    <RelativeLayout
+        android:id="@+id/activity_player_container_album_art"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Background Image  -->
+
+        <ImageView
+            android:id="@+id/activity_player_container_album_art_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/activity_player_album_art_background" />
+
+        <!-- Cover Image  -->
+
+        <ImageView
+            android:id="@+id/activity_player_container_album_art_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:src="@drawable/cover" />
+
+    </RelativeLayout>
+
+    <!-- Main Container -->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Duration Container -->
+
+        <RelativeLayout
+            android:id="@+id/activity_player_container_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/activity_player_duration_track_background"
+            android:padding="10dp">
+
+            <!-- Track Time -->
+
+            <TextView
+                android:id="@+id/activity_player_container_duration_track_time"
+                style="@style/activity_player_duration_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:text="@string/activity_player_duration_track_time_title" />
+
+            <TextView
+                android:id="@+id/activity_player_container_duration_track_time_value"
+                style="@style/activity_player_duration_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/activity_player_container_duration_track_time"
+                android:layout_toRightOf="@id/activity_player_container_duration_track_time"
+                android:text="00:00" />
+
+            <!-- Elapsed Time -->
+
+            <TextView
+                android:id="@+id/activity_player_container_duration_track_elapsed_time_value"
+                style="@style/activity_player_duration_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="00:00" />
+
+            <TextView
+                android:id="@+id/activity_player_container_duration_track_elapsed_time"
+                style="@style/activity_player_duration_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/activity_player_container_duration_track_elapsed_time_value"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/activity_player_container_duration_track_elapsed_time_value"
+                android:text="@string/activity_player_duration_track_elapsed_time_title" />
+
+        </RelativeLayout>
+
+        <!-- Track Info Container -->
+
+        <RelativeLayout
+            android:id="@+id/activity_player_container_track_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_player_container_duration"
+            android:background="@drawable/activity_player_track_info_background"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/activity_player_container_track_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="2dp"
+                android:text="Track Title"
+                android:textColor="@color/color_activity_player_track_info_title"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_player_container_track_info_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_player_container_track_info_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="2dp"
+                android:text="Track Artist"
+                android:textColor="@color/color_activity_player_track_info_artist"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_player_container_track_info_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_player_container_track_info_artist"
+                android:layout_centerHorizontal="true"
+                android:text="Track Album"
+                android:textColor="@color/color_activity_player_track_info_album"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <!-- Track Control Container -->
+
+        <RelativeLayout
+            android:id="@+id/activity_player_container_track_control"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_player_container_track_info"
+            android:background="@drawable/activity_player_track_control_background">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/activity_player_container_track_control_button_previous"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/selector_player_button_previous" />
+
+                <Button
+                    android:id="@+id/activity_player_container_track_control_button_pause"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/selector_player_button_pause" />
+
+                <Button
+                    android:id="@+id/activity_player_container_track_control_button_play"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/selector_player_button_play"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/activity_player_container_track_control_button_next"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/selector_player_button_next" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- SeekBar Container -->
+
+        <RelativeLayout
+            android:id="@+id/activity_player_container_track_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_player_container_track_control"
+            android:background="@drawable/activity_player_seekbar_background">
+
+            <SeekBar
+                android:id="@+id/activity_player_track_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:padding="15dp"
+                android:progressDrawable="@drawable/player_seekbar_style"
+                android:thumb="@drawable/activity_player_seekbar_dot" />
+
+        </RelativeLayout>
+
+        <!-- Next Track Container -->
+
+        <RelativeLayout
+            android:id="@+id/activity_player_container_next_track"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_player_container_track_seekbar"
+            android:background="@drawable/activity_player_next_track_background"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/activity_player_container_next_track_title"
+                style="@style/activity_player_next_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="10dp"
+                android:text="@string/activity_player_next_track" />
+
+            <TextView
+                android:id="@+id/activity_player_container_next_track_title_value"
+                style="@style/activity_player_next_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/activity_player_container_next_track_title"
+                android:text="Track Name" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
