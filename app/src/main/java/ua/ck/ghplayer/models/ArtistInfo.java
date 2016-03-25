@@ -1,8 +1,6 @@
 package ua.ck.ghplayer.models;
 
-
 public class ArtistInfo {
-
     private String summary;
     private String artistArtUrl;
 
@@ -18,6 +16,5 @@ public class ArtistInfo {
         super();
         this.summary = summary;
         this.artistArtUrl = artistArtUrl;
-
     }
 }

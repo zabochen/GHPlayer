@@ -70,7 +70,6 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
 
             artistListRecyclerView.setAdapter(artistListAdapter);
         }
-
     }
 
     @Override

@@ -66,7 +66,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
             int position = getLayoutPosition();
             Artist artist = data.get(position);
             ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) parentActivity;
-            itemClick.onArtistListItemClick(artist.getId());
+            itemClick.onArtistListItemClick(artist.getId(),artist.getArtist());
         }
     }
 }

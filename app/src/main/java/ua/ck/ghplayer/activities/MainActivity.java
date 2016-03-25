@@ -23,12 +23,15 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.events.StartMiniPlayerEvent;
 import ua.ck.ghplayer.events.StopMiniPlayerEvent;
 import ua.ck.ghplayer.fragments.AlbumListFragment;
+import ua.ck.ghplayer.fragments.ArtistInfoFragment;
 import ua.ck.ghplayer.fragments.ArtistListFragment;
 import ua.ck.ghplayer.fragments.GenreListFragment;
 import ua.ck.ghplayer.fragments.PlaylistListFragment;
@@ -245,22 +248,21 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onArtistListItemClick(int artistId) {
-        Toast.makeText(this, String.valueOf(artistId), Toast.LENGTH_SHORT).show();
-
+    public void onArtistListItemClick(int artistId, String artistName) {
         FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        TrackListFragment trackListFragment = new TrackListFragment();
-        fragmentTransaction.addToBackStack("Artist");
-        fragmentTransaction.replace(activityFrameLayout.getId(), trackListFragment);
+        ArtistInfoFragment artistInfoFragment = new ArtistInfoFragment();
+        artistInfoFragment.setArtistInfo(artistId, artistName);
+        fragmentTransaction.addToBackStack("ArtistInfo");
+        fragmentTransaction.replace(activityFrameLayout.getId(), artistInfoFragment);
 
         fragmentTransaction.commit();
     }
 
     @Override
     public void onPlaylistListItemClick(int playlistId) {
-        Toast.makeText(this,String.valueOf(playlistId), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(playlistId), Toast.LENGTH_SHORT).show();
 
         FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -270,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements
         fragmentTransaction.replace(activityFrameLayout.getId(), trackListFragment);
 
         fragmentTransaction.commit();
+    }
 
     @Subscribe
     public void onEvent(StartMiniPlayerEvent event) {
