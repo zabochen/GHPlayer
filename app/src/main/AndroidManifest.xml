@@ -40,9 +40,27 @@
             </intent-filter>
         </activity>
 
+        <!-- Music Service -->
         <service
             android:name=".services.MusicService"
-            android:enabled="true"/>
+            android:enabled="true" />
+
+        <!-- Notification Receiver -->
+        <receiver
+            android:name=".receivers.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ua.ck.player.notification.start" />
+                <action android:name="ua.ck.player.notification.stop" />
+
+                <action android:name="ua.ck.player.notification.button.previous" />
+                <action android:name="ua.ck.player.notification.button.play" />
+                <action android:name="ua.ck.player.notification.button.pause" />
+                <action android:name="ua.ck.player.notification.button.stop" />
+                <action android:name="ua.ck.player.notification.button.next" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

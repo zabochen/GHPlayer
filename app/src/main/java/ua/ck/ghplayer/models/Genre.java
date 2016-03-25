@@ -1,30 +1,33 @@
 package ua.ck.ghplayer.models;
 
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
-
 public class Genre {
-    //Constants for Genre query
-    public static final String[] projection = {
-            MediaStore.Audio.Genres.NAME
-    };
 
-    public static final Uri EXTERNAL_CONTENT_URI = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI;
-    public static final Uri INTERNAL_CONTENT_URI = MediaStore.Audio.Genres.INTERNAL_CONTENT_URI;
+    // Fields
+    private long id;            // Type: INTEGER (long), Constant Value: "_id"
+    private String name;        // Type: TEXT, Constant Value: "name"
 
-    //Variables
-    private String name;
+    // Constants Genre
+    public static final String ID = "_id";
+    public static final String NAME = "name";
 
-    public Genre(String name){
-        this.name=name;
+    public Genre(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public Genre(Cursor cursor){
-        this.name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME));
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

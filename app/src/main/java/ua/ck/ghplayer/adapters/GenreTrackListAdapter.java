@@ -11,13 +11,15 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.lists.GenreList;
+import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 
-public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyViewHolder> {
+public class GenreTrackListAdapter extends RecyclerView.Adapter<GenreTrackListAdapter.MyViewHolder> {
 
     private Context context;
 
-    public TrackListAdapter() {
+    public GenreTrackListAdapter() {
     }
 
     @Override
@@ -30,12 +32,13 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.title.setText(TrackList.getInstance().getTrackList().get(position).getTitle());
-        holder.artist.setText(TrackList.getInstance().getTrackList().get(position).getArtist());
-        holder.album.setText(TrackList.getInstance().getTrackList().get(position).getAlbum());
-        if (TrackList.getInstance().getTrackList().get(position).getAlbumArt() != null) {
+        holder.title.setText(GenreTrackList.getInstance().getGenreTrackList().get(position).getTitle());
+        holder.artist.setText(GenreTrackList.getInstance().getGenreTrackList().get(position).getArtist());
+        holder.album.setText(GenreTrackList.getInstance().getGenreTrackList().get(position).getAlbum());
+
+        if (GenreTrackList.getInstance().getGenreTrackList().get(position).getAlbumArt() != null) {
             Picasso.with(context)
-                    .load(TrackList.getInstance().getTrackList().get(position).getAlbumArt())
+                    .load(GenreTrackList.getInstance().getGenreTrackList().get(position).getAlbumArt())
                     .into(holder.albumArt);
         } else {
             Picasso.with(context)
@@ -46,15 +49,15 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return TrackList.getInstance().getTrackList() != null ? TrackList.getInstance().getTrackList().size() : 0;
+        return GenreTrackList.getInstance().getGenreTrackList() != null ? GenreTrackList.getInstance().getGenreTrackList().size() : 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // Views
-        public TextView title;
-        public TextView artist;
-        public TextView album;
-        public ImageView albumArt;
+        private TextView title;
+        private TextView artist;
+        private TextView album;
+        private ImageView albumArt;
 
         public MyViewHolder(View itemView) {
             super(itemView);

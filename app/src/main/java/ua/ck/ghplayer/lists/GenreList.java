@@ -1,5 +1,6 @@
 package ua.ck.ghplayer.lists;
 
+import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -7,30 +8,38 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.models.Genre;
 
 public class GenreList {
-    private static GenreList ourInstance = new GenreList();
-    private static ArrayList genreList = new ArrayList();
 
-    public static GenreList getInstance() {
-        return ourInstance;
-    }
+    private static GenreList instance;
+    private static ArrayList<Genre> genreList;
 
     private GenreList() {
     }
 
-    public void setGenreList(Cursor cursor) {
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            do{
-                genreList.add(new Genre(cursor));
-            }while(cursor.moveToNext());
+    public static GenreList getInstance() {
+        if (instance == null) {
+            instance = new GenreList();
         }
+        return instance;
     }
 
-    public ArrayList getGenreList() {
-        return genreList;
+    public void setGenreList(Context context, Cursor cursor) {
+        cursor.moveToFirst();
+        genreList = new ArrayList<>();
+
+        do {
+            // Get The Value Of Fields
+            long id = cursor.getLong(cursor.getColumnIndexOrThrow(Genre.ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(Genre.NAME));
+
+            // Add Object To ArrayList
+            Genre genre = new Genre(id, name);
+            genreList.add(genre);
+        } while (cursor.moveToNext());
+
     }
 
-    public void clearGenreList(){
-        genreList.clear();
+    public ArrayList<Genre> getGenreList() {
+        return genreList != null ? genreList : null;
     }
+
 }

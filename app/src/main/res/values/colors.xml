@@ -16,10 +16,13 @@
     <color name="color_navigation_view_item_selected">#3d4041</color>
 
     <!-- Item Track List -->
-    <color name="color_item_track_list_text">#99999c</color>
+    <color name="color_item_track_list_text">#aeaeb3</color>
 
     <!-- Divider -->
     <color name="color_divider">#2d2c35</color>
+
+    <!-- AlbumArt Border -->
+    <color name="color_album_art_border">#474653</color>
 
     <!-- Mini Player -->
     <color name="color_activity_mini_player_track_title">#9d9d9e</color>

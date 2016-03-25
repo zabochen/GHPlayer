@@ -7,21 +7,17 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 
-public class TrackListLoader extends CursorLoader {
+public class GenreListLoader extends CursorLoader {
 
     private Context context;
-    private Uri uriExternalContent = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    private Uri uriExternalContent = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI;
     private String[] projection = {
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.DURATION
+            MediaStore.Audio.Genres._ID,
+            MediaStore.Audio.Genres.NAME
     };
-    private String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 ";
+    private String selection = MediaStore.Audio.Genres.NAME + " != ''";
 
-    public TrackListLoader(Context context) {
+    public GenreListLoader(Context context) {
         super(context);
         this.context = context;
     }

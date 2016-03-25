@@ -12,10 +12,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.events.PausePlayerEvent;
-import ua.ck.ghplayer.events.PlayMiniPlayerEvent;
 import ua.ck.ghplayer.events.PlayPausePlayerEvent;
+import ua.ck.ghplayer.events.PlayerUpdateEvent;
 import ua.ck.ghplayer.events.TouchProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
+import ua.ck.ghplayer.utils.Constants;
 import ua.ck.ghplayer.utils.TimeUtils;
 
 public class PlayerActivity extends AppCompatActivity
@@ -39,7 +40,6 @@ public class PlayerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-
         setView();
     }
 
@@ -47,6 +47,7 @@ public class PlayerActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         eventBus.register(this);
+        eventBus.post(new PlayerUpdateEvent(Constants.PLAYER_STATUS_START));
     }
 
     private void setView() {
@@ -114,6 +115,8 @@ public class PlayerActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
+        // Event - Activity Player Close
+        eventBus.post(new PlayerUpdateEvent(Constants.PLAYER_STATUS_STOP));
         eventBus.unregister(this);
         super.onStop();
     }

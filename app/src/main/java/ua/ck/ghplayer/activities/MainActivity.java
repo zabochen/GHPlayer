@@ -27,29 +27,31 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.events.NotificationPlayerEvent;
+import ua.ck.ghplayer.events.ShowTrackListFragment;
 import ua.ck.ghplayer.events.StartMiniPlayerEvent;
 import ua.ck.ghplayer.events.StopMiniPlayerEvent;
 import ua.ck.ghplayer.fragments.AlbumListFragment;
 import ua.ck.ghplayer.fragments.ArtistListFragment;
 import ua.ck.ghplayer.fragments.GenreListFragment;
+import ua.ck.ghplayer.fragments.GenreTrackListFragment;
 import ua.ck.ghplayer.fragments.PlaylistListFragment;
 import ua.ck.ghplayer.fragments.TrackListFragment;
+import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.services.MusicService;
+import ua.ck.ghplayer.utils.Constants;
+import ua.ck.ghplayer.utils.ServiceUtils;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener {
 
-    // Bundle
-    private static final String KEY_NAVIGATION_VIEW_ITEM_SELECTED = "NavigationViewItemSelected";
-    private static final String KEY_MINI_PLAYER_GONE = "MiniPlayerGone";
-    private static final String KEY_MINI_PLAYER_TRACK_POSITION = "MiniPlayerTrackPosition";
-
     // Values
     private static int navigationViewItemSelected;
-    private static boolean miniPlayerGone;
-    private static int miniPlayerTrackPosition;
+    private boolean miniPlayerGone;
+    private int trackListId;
+    private int trackPosition;
 
     // Views
     private Toolbar toolbar;
@@ -58,10 +60,13 @@ public class MainActivity extends AppCompatActivity implements
 
     // MiniPlayer View's
     private ImageView imageViewAlbumArt;
+    private TextView title;
     private Button buttonPrevious;
     private Button buttonPause;
     private Button buttonStop;
 
+    // Fragments
+    private FragmentManager fragmentManager;
 
     // Instances
     private EventBus eventBus = EventBus.getDefault();
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
         // Find View
         imageViewAlbumArt = (ImageView) findViewById(R.id.activity_mini_player_album_art);
         buttonStop = (Button) findViewById(R.id.activity_mini_player_button_stop);
+        title = (TextView) findViewById(R.id.activity_mini_player_title);
 
         // Set Listener
         imageViewAlbumArt.setOnClickListener(this);
@@ -94,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(KEY_NAVIGATION_VIEW_ITEM_SELECTED, navigationViewItemSelected);
-        outState.putBoolean(KEY_MINI_PLAYER_GONE, miniPlayerGone);
-        outState.putInt(KEY_MINI_PLAYER_TRACK_POSITION, miniPlayerTrackPosition);
+        outState.putBoolean(Constants.MINI_PLAYER_GONE_KEY, miniPlayerGone);
+        outState.putInt(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY, trackListId);
+        outState.putInt(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
     }
 
     private void setInstanceState(Bundle bundle) {
@@ -108,12 +114,10 @@ public class MainActivity extends AppCompatActivity implements
             navigationViewItemSelected = R.id.menu_navigation_view_item_tracks;
         } else {
             // MiniPlayer
-            miniPlayerGone = bundle.getBoolean(KEY_MINI_PLAYER_GONE);
-            miniPlayerTrackPosition = bundle.getInt(KEY_MINI_PLAYER_TRACK_POSITION);
-            setMiniPlayerTitle(TrackList.getInstance().getTrackList().get(miniPlayerTrackPosition).getTitle());
-
-            // Navigation View
-            navigationViewItemSelected = bundle.getInt(KEY_NAVIGATION_VIEW_ITEM_SELECTED);
+            miniPlayerGone = bundle.getBoolean(Constants.MINI_PLAYER_GONE_KEY);
+            trackListId = bundle.getInt(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY);
+            trackPosition = bundle.getInt(Constants.MINI_PLAYER_TRACK_POSITION_KEY);
+            setMiniPlayerTrackTitle(trackListId, trackPosition);
         }
     }
 
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        // Close Navigation View
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -141,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.app_name);
-            actionBar.setSubtitle(R.string.app_name);
         }
     }
 
@@ -208,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Add Fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(activityFrameLayout.getId(), listFragment);
 
@@ -217,6 +221,29 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         fragmentTransaction.commit();
+    }
+
+    @Subscribe
+    public void onShowTrackListFragment(ShowTrackListFragment event) {
+
+        switch (event.getShowTrackList()) {
+            case (Constants.SHOW_GENRE_TRACK_LIST):
+                // Send Genre ID to Fragment
+                Bundle bundle = new Bundle();
+                bundle.putLong(Constants.SHOW_GENRE_TRACK_LIST_BUNDLE_KEY, event.getId());
+
+                FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
+
+                GenreTrackListFragment genreTrackListFragment = new GenreTrackListFragment();
+                genreTrackListFragment.setArguments(bundle);
+
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(activityFrameLayout.getId(), genreTrackListFragment)
+                        .addToBackStack(null)
+                        .commit();
+                break;
+        }
+
     }
 
     @Override
@@ -229,21 +256,49 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Subscribe
-    public void onEvent(StartMiniPlayerEvent event) {
-        // Visible MiniPlayer
-        setMiniPlayerGone(false);
+    public void onStartMiniPlayerEvent(StartMiniPlayerEvent event) {
 
-        // Set Track Position
-        miniPlayerTrackPosition = event.getPosition();
+        this.trackListId = event.getTrackListId();
+        this.trackPosition = event.getPosition();
+
+        // Visible MiniPlayer
+        if (miniPlayer.getVisibility() == View.GONE) {
+            setMiniPlayerGone(false);
+        }
 
         // Start MusicService
-        Intent musicServiceIntent = new Intent(getApplicationContext(), MusicService.class);
-        musicServiceIntent.putExtra(KEY_NAVIGATION_VIEW_ITEM_SELECTED, navigationViewItemSelected);
-        musicServiceIntent.putExtra(KEY_MINI_PLAYER_TRACK_POSITION, miniPlayerTrackPosition);
-        startService(musicServiceIntent);
+        Intent musicServiceStartIntent = new Intent(getApplicationContext(), MusicService.class);
+        musicServiceStartIntent.putExtra(Constants.TRACK_LISTS_ID_KEY, trackListId);
+        musicServiceStartIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
+        startService(musicServiceStartIntent);
 
-        // Set Track Title
-        setMiniPlayerTitle(TrackList.getInstance().getTrackList().get(event.getPosition()).getTitle());
+        // Set MiniPlayer track title
+        setMiniPlayerTrackTitle(trackListId, trackPosition);
+    }
+
+    private void setMiniPlayerTrackTitle(int trackListId, int trackPosition) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        switch (trackListId) {
+            case (Constants.MAIN_TRACK_LIST_ID):
+                stringBuilder.append(TrackList.getInstance().getTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(TrackList.getInstance().getTrackList().get(trackPosition).getTitle());
+                break;
+            case (Constants.ALBUM_TRACK_LIST_ID):
+                break;
+            case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                break;
+            case (Constants.GENRE_TRACK_LIST_ID):
+                stringBuilder.append(GenreTrackList.getInstance().getGenreTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(GenreTrackList.getInstance().getGenreTrackList().get(trackPosition).getTitle());
+                break;
+        }
+
+        title.setText(stringBuilder.toString());
+        title.setSelected(true);
+
     }
 
     private void setMiniPlayerGone(boolean miniPlayerGone) {
@@ -261,12 +316,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void setMiniPlayerTitle(String trackTitle) {
-        TextView title = (TextView) findViewById(R.id.activity_mini_player_title);
-        title.setText(trackTitle);
-        title.setSelected(true);
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -277,14 +326,26 @@ public class MainActivity extends AppCompatActivity implements
 //                eventBus.post(new PlayMiniPlayerEvent(miniPlayerTrackPosition));
 //                break;
             case (R.id.activity_mini_player_button_stop):
-                eventBus.post(new StopMiniPlayerEvent(miniPlayerTrackPosition));
+                eventBus.post(new StopMiniPlayerEvent());
                 setMiniPlayerGone(true);
+                Intent musicServiceStopIntent = new Intent(getApplicationContext(), MusicService.class);
+                stopService(musicServiceStopIntent);
                 break;
         }
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        // Start Notification Player
+        if (ServiceUtils.musicServiceRunning(getApplicationContext(), MusicService.class)) {
+            eventBus.post(new NotificationPlayerEvent(Constants.NOTIFICATION_PLAYER_START));
+        }
+    }
+
+    @Override
     protected void onDestroy() {
+        // Event Bus
         eventBus.unregister(this);
         super.onDestroy();
     }

@@ -216,7 +216,7 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onClick(View view, int position) {
         // Sending the current track position in the MiniPlayer
-        eventBus.post(new StartMiniPlayerEvent(position));
+        eventBus.post(new StartMiniPlayerEvent(Constants.MAIN_TRACK_LIST_ID, position));
     }
 
     @Override

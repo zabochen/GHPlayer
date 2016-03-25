@@ -3,6 +3,8 @@ package ua.ck.ghplayer.lists;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,7 @@ import java.util.Collections;
 import ua.ck.ghplayer.comparators.TrackListComparator;
 import ua.ck.ghplayer.models.Track;
 import ua.ck.ghplayer.utils.Constants;
+import ua.ck.ghplayer.utils.ImageUtils;
 
 public class TrackList {
 
@@ -35,10 +38,12 @@ public class TrackList {
             String title = cursor.getString(cursor.getColumnIndexOrThrow(Track.TITLE));
             String artist = cursor.getString(cursor.getColumnIndexOrThrow(Track.ARTIST));
             String album = cursor.getString(cursor.getColumnIndexOrThrow(Track.ALBUM));
+            long albumId = cursor.getLong(cursor.getColumnIndexOrThrow(Track.ALBUM_ID));
             long duration = cursor.getLong(cursor.getColumnIndexOrThrow(Track.DURATION));
+            Uri albumArt = ImageUtils.getAlbumArt(context, albumId);
 
             // Add Object To ArrayList
-            Track track = new Track(id, title, artist, album, duration);
+            Track track = new Track(id, title, artist, album, albumId, albumArt, duration);
             trackList.add(track);
         } while (cursor.moveToNext());
 
