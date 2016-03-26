@@ -2,18 +2,37 @@ package ua.ck.ghplayer.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.concurrent.ExecutionException;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.models.ArtistInfo;
+import ua.ck.ghplayer.utils.ArtistInfoAsyncLoader;
 
 public class ArtistInfoFragment extends Fragment {
-
+    private ArtistInfo artistInfo;
+    private int artistId;
+    private String artistName;
 
     public ArtistInfoFragment() {
-        // Required empty public constructor
+        super();
+    }
+
+    public void setArtistInfo(int artistId, String artistName) {
+        this.artistId = artistId;
+        this.artistName = artistName;
     }
 
 
@@ -24,4 +43,40 @@ public class ArtistInfoFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_artist_info, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        try {
+            artistInfo = new ArtistInfoAsyncLoader(getContext()).execute(artistName).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        TextView info = (TextView) view.findViewById(R.id.fragment_artist_info__artist_info);
+        ImageView cover = (ImageView) view.findViewById(R.id.fragment_artist_info__artist_cover);
+
+        info.setText(artistInfo.getSummary());
+        Picasso.with(getContext())
+                .load(artistInfo.getArtistArtUrl())
+                //.placeholder(R.drawable.album_placeholder)
+                .into(cover);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("artistId",artistId);
+        AlbumListFragment albumList = new AlbumListFragment();
+
+        FrameLayout artistAlbumList = (FrameLayout) view.findViewById(R.id.fragment_artist_info__album_list);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(artistAlbumList.getId(), albumList);
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

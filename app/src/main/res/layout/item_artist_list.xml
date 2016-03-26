@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical">
 
@@ -26,19 +26,45 @@
             android:textColor="@color/color_item_track_list_text"
             android:id="@+id/item_artist_list_artist" />
 
-        <View style="@style/Divider" />
-
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_item_track_list_text"
-            android:id="@+id/item_artist_list_number_of_albums" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_item_track_list_text"
-            android:id="@+id/item_artist_list_number_of_tracks" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_item_track_list_text"
+                android:id="@+id/item_artist_list_number_of_albums" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" albums"
+                android:textColor="@color/color_item_track_list_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_item_track_list_text"
+                android:id="@+id/item_artist_list_number_of_tracks" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" tracks"
+                android:textColor="@color/color_item_track_list_text" />
+        </LinearLayout>
+
+        <View style="@style/Divider"
+            android:layout_width="match_parent" />
+
     </LinearLayout>
 
 

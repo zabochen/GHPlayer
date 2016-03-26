@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,12 +33,14 @@ import ua.ck.ghplayer.events.ShowTrackListFragment;
 import ua.ck.ghplayer.events.StartMiniPlayerEvent;
 import ua.ck.ghplayer.events.StopMiniPlayerEvent;
 import ua.ck.ghplayer.fragments.AlbumListFragment;
+import ua.ck.ghplayer.fragments.ArtistInfoFragment;
 import ua.ck.ghplayer.fragments.ArtistListFragment;
 import ua.ck.ghplayer.fragments.GenreListFragment;
 import ua.ck.ghplayer.fragments.GenreTrackListFragment;
 import ua.ck.ghplayer.fragments.PlaylistListFragment;
 import ua.ck.ghplayer.fragments.TrackListFragment;
 import ua.ck.ghplayer.lists.GenreTrackList;
+import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.services.MusicService;
 import ua.ck.ghplayer.utils.Constants;
@@ -45,7 +48,13 @@ import ua.ck.ghplayer.utils.ServiceUtils;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
+        ItemClickFragmentSetter,
         View.OnClickListener {
+
+    // Bundle
+    private static final String KEY_NAVIGATION_VIEW_ITEM_SELECTED = "NavigationViewItemSelected";
+    private static final String KEY_MINI_PLAYER_GONE = "MiniPlayerGone";
+    private static final String KEY_MINI_PLAYER_TRACK_POSITION = "MiniPlayerTrackPosition";
 
     // Values
     private static int navigationViewItemSelected;
@@ -215,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(activityFrameLayout.getId(), listFragment);
-
         if (isLandscapeOrientedTablet) {
             //fragmentTransaction.replace(, optionalFragment);
         }
@@ -253,6 +261,48 @@ public class MainActivity extends AppCompatActivity implements
         setFragment();
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onAlbumListItemClick(String album, int albumId) {
+        Toast.makeText(this, album + String.valueOf(albumId), Toast.LENGTH_SHORT).show();
+
+        FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        TrackListFragment trackListFragment = new TrackListFragment();
+        fragmentTransaction.addToBackStack("Album");
+        fragmentTransaction.replace(activityFrameLayout.getId(), trackListFragment);
+
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void onArtistListItemClick(int artistId, String artistName) {
+        FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        ArtistInfoFragment artistInfoFragment = new ArtistInfoFragment();
+        artistInfoFragment.setArtistInfo(artistId, artistName);
+        fragmentTransaction.addToBackStack("ArtistInfo");
+        fragmentTransaction.replace(activityFrameLayout.getId(), artistInfoFragment);
+
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onPlaylistListItemClick(int playlistId) {
+        Toast.makeText(this, String.valueOf(playlistId), Toast.LENGTH_SHORT).show();
+
+        FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        TrackListFragment trackListFragment = new TrackListFragment();
+        fragmentTransaction.addToBackStack("Playlist");
+        fragmentTransaction.replace(activityFrameLayout.getId(), trackListFragment);
+
+        fragmentTransaction.commit();
     }
 
     @Subscribe

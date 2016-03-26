@@ -16,13 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.ck.ghplayer.R;
-import ua.ck.ghplayer.adapters.AlbumListAdapter;
 import ua.ck.ghplayer.adapters.ArtistListAdapter;
-import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.ArtistList;
 import ua.ck.ghplayer.models.Artist;
 
-public class ArtistListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ArtistListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_ARTIST_LIST_LOADER = 3;
     RecyclerView artistListRecyclerView;
     ArtistListAdapter artistListAdapter;
@@ -68,11 +66,10 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
         if (data != null && data.moveToFirst()) {
             ArtistList artistList = ArtistList.getInstance();
             artistList.setArtistList(data);
-            artistListAdapter = new ArtistListAdapter(artistList.getArtistList());
+            artistListAdapter = new ArtistListAdapter(artistList.getArtistList(),getActivity());
 
             artistListRecyclerView.setAdapter(artistListAdapter);
         }
-
     }
 
     @Override

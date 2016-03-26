@@ -14,12 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.AlbumListAdapter;
-import ua.ck.ghplayer.interfaces.ItemClickListener;
-import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.AlbumList;
 import ua.ck.ghplayer.models.Album;
 
@@ -48,8 +45,6 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         albumListRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_list_recycler_view);
         albumListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //RecyclerViewTouchListener albumListTouchListener = new RecyclerViewTouchListener(getContext(), this, albumListRecyclerView);
-        //albumListRecyclerView.addOnItemTouchListener(albumListTouchListener);
         albumListRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -69,8 +64,7 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         if (data != null && data.moveToFirst()) {
             AlbumList albumList = AlbumList.getInstance();
             albumList.setAlbumList(data);
-            albumListAdapter = new AlbumListAdapter(albumList.getAlbumList());
-
+            albumListAdapter = new AlbumListAdapter(getContext(), getActivity(), albumList.getAlbumList());
             albumListRecyclerView.setAdapter(albumListAdapter);
         }
 

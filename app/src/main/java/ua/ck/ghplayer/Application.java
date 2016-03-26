@@ -1,5 +1,9 @@
 package ua.ck.ghplayer;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -10,6 +14,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         // Shared Preferences
         SharedPreferences sharedPreferences = getApplicationContext()

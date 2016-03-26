@@ -8,7 +8,7 @@ import ua.ck.ghplayer.models.Album;
 
 public class AlbumList {
     private static AlbumList ourInstance = new AlbumList();
-    private static ArrayList albumList = new ArrayList();
+    private static ArrayList<Album> albumList = new ArrayList();
 
     private AlbumList() {
     }
@@ -17,20 +17,21 @@ public class AlbumList {
         return ourInstance;
     }
 
-    public ArrayList getAlbumList() {
+    public ArrayList<Album> getAlbumList() {
         return albumList;
     }
 
     public void setAlbumList(Cursor cursor) {
+        clearAlbumList();
         if (cursor != null && cursor.moveToFirst()) {
             cursor.moveToFirst();
-            do{
+            do {
                 albumList.add(new Album(cursor));
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
     }
 
-    public void clearAlbumList(){
+    public void clearAlbumList() {
         albumList.clear();
     }
 
