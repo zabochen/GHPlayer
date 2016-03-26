@@ -1,7 +1,7 @@
 package ua.ck.ghplayer.models;
 
 public class ArtistInfo {
-    private String summary;
+    private String summary = "Unknown";
     private String artistArtUrl;
 
     public String getSummary() {
