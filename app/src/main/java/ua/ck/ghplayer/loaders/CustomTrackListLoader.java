@@ -8,11 +8,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import ua.ck.ghplayer.utils.PlaylistUtils;
+
 public class CustomTrackListLoader extends CursorLoader {
     private Context context;
     private String choiceMode;
     private long id;
     private String[] selectionArgs;
+    private String sortOrder;
 
     private Uri uriExternalContent = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private String[] projection = {
@@ -30,10 +33,11 @@ public class CustomTrackListLoader extends CursorLoader {
         this.context = context;
     }
 
-    public CustomTrackListLoader(Context context, String choiceMode, long id) {
+    public CustomTrackListLoader(Context context, String choiceMode, long id, String sortOrder) {
         this(context);
         this.choiceMode = choiceMode;
         this.id = id;
+        this.sortOrder = sortOrder;
     }
 
     @Override
@@ -41,17 +45,22 @@ public class CustomTrackListLoader extends CursorLoader {
         selectionArgs = new String[]{String.valueOf(id)};
         switch (choiceMode) {
             case "ALBUM":
-                selection = selection +" AND " + MediaStore.Audio.Media.ALBUM_ID + "=?";
+                selection = selection + " AND " + MediaStore.Audio.Media.ALBUM_ID + "=?";
                 break;
             case "ARTIST":
-                selection = selection +" AND " + MediaStore.Audio.Media.ARTIST_ID + "=?";
+                selection = selection + " AND " + MediaStore.Audio.Media.ARTIST_ID + "=?";
                 break;
             case "PLAYLIST":
                 uriExternalContent = MediaStore.Audio.Playlists.Members.getContentUri("external", id);
+                selectionArgs = null;
+                break;
+            case "FAVORITE":
+                uriExternalContent = PlaylistUtils.getFavoritePlaylistUri();
+                selectionArgs = null;
                 break;
         }
 
         ContentResolver contentResolver = context.getContentResolver();
-        return contentResolver.query(uriExternalContent, projection, selection, selectionArgs, null);
+        return contentResolver.query(uriExternalContent, projection, selection, selectionArgs, sortOrder);
     }
 }

@@ -69,7 +69,7 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
             artistList.setArtistList(getActivity(), data);
             artistListAdapter.setData(getContext(), artistList.getArtistList());
 
-            artistListRecyclerView.getAdapter().notifyDataSetChanged();
+            artistListAdapter.notifyDataSetChanged();
         }
     }
 

@@ -1,35 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginRight="15dp"
-    xmlns:ghplayer="http://schemas.android.com/apk/res-auto">
-<!--
-    <ImageView
-        android:id="@+id/item_track_list_album_art"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp" />
--->
+    android:layout_marginRight="15dp">
 
     <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/item_track_list_album_art"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        ghplayer:siRadius="6dp"
+        android:layout_margin="10dp"
+        ghplayer:siBorderColor="@color/color_album_art_border"
         ghplayer:siBorderWidth="3dp"
-        ghplayer:siBorderColor="@color/color_divider"
-        ghplayer:siSquare="true"/>
+        ghplayer:siRadius="6dp"
+        ghplayer:siSquare="true" />
 
     <TextView
         android:id="@+id/item_track_list_title"
@@ -37,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/item_track_list_album_art"
         android:layout_toRightOf="@id/item_track_list_album_art"
-        android:textColor="@color/color_item_track_list_text"
-        android:singleLine="true"
         android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textColor="@color/color_item_track_list_text"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -59,8 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/item_track_list_artist"
         android:layout_marginBottom="10dp"
-        android:singleLine="true"
         android:layout_toRightOf="@id/item_track_list_album_art"
+        android:singleLine="true"
         android:textColor="@color/color_item_track_list_text"
         android:textSize="12sp" />
 

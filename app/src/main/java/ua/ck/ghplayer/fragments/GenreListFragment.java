@@ -13,13 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.GenreListAdapter;
-import ua.ck.ghplayer.events.ShowTrackListFragment;
+import ua.ck.ghplayer.events.ShowTrackListActivity;
 import ua.ck.ghplayer.interfaces.ItemClickListener;
 import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.GenreList;
@@ -28,7 +27,6 @@ import ua.ck.ghplayer.utils.Constants;
 
 public class GenreListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemClickListener {
 
-    private static final int ID_GENRE_LIST_LOADER = 4;
     private RecyclerView genreListRecyclerView;
     private GenreListAdapter genreListAdapter;
 
@@ -72,7 +70,7 @@ public class GenreListFragment extends Fragment implements LoaderManager.LoaderC
         super.onActivityCreated(savedInstanceState);
 
         // GenreList Loader
-        getLoaderManager().initLoader(ID_GENRE_LIST_LOADER, null, this);
+        getLoaderManager().initLoader(Constants.GENRE_LIST_LOADER_ID, null, this);
     }
 
     @Override
@@ -95,11 +93,10 @@ public class GenreListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onClick(View view, int position) {
-        eventBus.post(new ShowTrackListFragment(Constants.SHOW_GENRE_TRACK_LIST, GenreList.getInstance().getGenreList().get(position).getId()));
+        eventBus.post(new ShowTrackListActivity(Constants.GENRE_TRACK_LIST_ID, position));
     }
 
     @Override
     public void onLongClick(View view, int position) {
-        Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
     }
 }

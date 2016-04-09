@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.PlaylistListAdapter;
 import ua.ck.ghplayer.lists.PlaylistList;
@@ -22,8 +24,9 @@ import ua.ck.ghplayer.models.Playlist;
 
 public class PlaylistListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_PLAYLIST_LIST_LOADER = 5;
-    RecyclerView playlistListRecyclerView;
-    PlaylistListAdapter playlistListAdapter;
+    private RecyclerView playlistListRecyclerView;
+    private PlaylistListAdapter playlistListAdapter;
+    private ArrayList<Playlist> dataArray;
 
 
     public PlaylistListFragment() {
@@ -43,10 +46,11 @@ public class PlaylistListFragment extends Fragment implements LoaderManager.Load
 
         playlistListRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_list_recycler_view);
         playlistListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //RecyclerViewTouchListener playlistListTouchListener = new RecyclerViewTouchListener(getContext(), this, playlistListRecyclerView);
-        //playlistListRecyclerView.addOnItemTouchListener(playlistListTouchListener);
         playlistListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        playlistListRecyclerView.setHasFixedSize(true);
+
+        playlistListAdapter = new PlaylistListAdapter();
+        playlistListRecyclerView.setAdapter(playlistListAdapter);
     }
 
     @Override
@@ -65,9 +69,10 @@ public class PlaylistListFragment extends Fragment implements LoaderManager.Load
         if (data != null && data.moveToFirst()) {
             PlaylistList playlistList = PlaylistList.getInstance();
             playlistList.setPlaylistList(data);
-            playlistListAdapter = new PlaylistListAdapter(playlistList.getPlaylistList(), getActivity());
+            dataArray = playlistList.getPlaylistList();
+            playlistListAdapter.setData(getContext(), playlistList.getPlaylistList());
 
-            playlistListRecyclerView.setAdapter(playlistListAdapter);
+            playlistListAdapter.notifyDataSetChanged();
         }
     }
 

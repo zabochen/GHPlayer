@@ -11,7 +11,7 @@
     <string name="menu_navigation_view_item_albums">Albums</string>
     <string name="menu_navigation_view_item_artists">Artists</string>
     <string name="menu_navigation_view_item_genres">Genres</string>
-    <string name="menu_navigation_view_item_playlists">Playlists</string>
+    <string name="menu_navigation_view_item_favorites">Favorites</string>
 
     <!-- Menu Fragment's -->
     <string name="menu_fragments_sorting_title">Sorting</string>
@@ -21,7 +21,6 @@
     <!-- Player -->
     <string name="activity_player_duration_track_time_title">Track Time:</string>
     <string name="activity_player_duration_track_elapsed_time_title">Elapsed Time:</string>
-    <string name="activity_player_next_track">Next Track:</string>
 
     <!-- Menu Dialog TrackList Fragment -->
     <string-array name="menu_fragment_track_list_sorting_dialog">

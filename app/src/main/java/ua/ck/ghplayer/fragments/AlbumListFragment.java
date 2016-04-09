@@ -27,8 +27,9 @@ import ua.ck.ghplayer.models.Album;
 public class AlbumListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_ALBUM_LIST_LOADER = 2;
     private RecyclerView albumListRecyclerView;
-    AlbumListAdapter albumListAdapter;
+    private AlbumListAdapter albumListAdapter;
     private boolean flagCustom = false;
+    private ArrayList<Album> dataArray;
 
     public AlbumListFragment() {
         // Required empty public constructor
@@ -67,7 +68,7 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         Bundle bundle = getArguments();
 
         if (bundle != null && bundle.containsKey("ARTIST_ID")) {
-            String[] selectionArgs = new String[] {String.valueOf(bundle.getLong("ARTIST_ID"))};
+            String[] selectionArgs = new String[]{String.valueOf(bundle.getLong("ARTIST_ID"))};
             flagCustom = true;
 
             return new CursorLoader(getContext(),
@@ -84,7 +85,6 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            ArrayList<Album> dataArray = null;
 
             if (flagCustom) {
                 CustomAlbumList albumList = CustomAlbumList.getInstance();
@@ -95,9 +95,9 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
                 albumList.setAlbumList(data);
                 dataArray = albumList.getAlbumList();
             }
-            albumListAdapter.setData(getContext(), dataArray);
 
-            albumListRecyclerView.getAdapter().notifyDataSetChanged();
+            albumListAdapter.setData(getContext(), dataArray);
+            albumListAdapter.notifyDataSetChanged();
         }
 
     }

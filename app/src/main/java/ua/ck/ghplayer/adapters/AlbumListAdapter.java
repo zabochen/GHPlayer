@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.activities.CustomTrackListActivity;
-import ua.ck.ghplayer.activities.MainActivity;
-import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.models.Album;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
@@ -45,7 +43,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         Album album = data.get(position);
         Picasso.with(context)
                 .load(album.getAlbumCoverUri())
-                .placeholder(R.drawable.bg_default_album_art)
+                .placeholder(R.drawable.album_cover_default)
                 .into(holder.cover);
         String firstYear = album.getFirstYear() > 0 ? String.valueOf(album.getFirstYear()) : "";
         String title = new StringBuffer()
@@ -82,20 +80,12 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         @Override
         public void onClick(View v) {
             int position = getLayoutPosition();
-            Album album = data.get(position);
-            // Delete
-            try{
 
-                ItemClickFragmentSetter itemClick =  (ItemClickFragmentSetter) context;
-                itemClick.onAlbumListItemClick(album.getAlbum(), (int)album.getId());
-            } catch (ClassCastException e) {
-            }
-
-            /*Intent intent = new Intent(context, CustomTrackListActivity.class);
-            intent.putExtra("ALBUM_NAME", album.getAlbum());
-            intent.putExtra("ALBUM_ID", album.getId());
+            Intent intent = new Intent(context, CustomTrackListActivity.class);
+            intent.putExtra("CHOICE_MODE", "ALBUM");
+            intent.putExtra("ALBUM_NAME", data.get(position).getAlbum());
+            intent.putExtra("ALBUM_ID", data.get(position).getId());
             context.startActivity(intent);
-            */
         }
     }
 }

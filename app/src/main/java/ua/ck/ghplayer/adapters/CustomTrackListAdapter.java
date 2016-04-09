@@ -45,8 +45,8 @@ public class CustomTrackListAdapter extends RecyclerView.Adapter<CustomTrackList
 
         Picasso.with(context)
                 .load(track.getAlbumArt())
-                .placeholder(R.drawable.bg_default_album_art)
-                .error(R.drawable.bg_default_album_art)
+                .placeholder(R.drawable.album_cover_default)
+                .error(R.drawable.album_cover_default)
                 .into(holder.albumArt);
     }
 

@@ -1,28 +1,30 @@
 package ua.ck.ghplayer.adapters;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
-import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
+import ua.ck.ghplayer.activities.CustomTrackListActivity;
 import ua.ck.ghplayer.models.Playlist;
 
 public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder> {
-    private ArrayList<Playlist> data;
     private Context context;
+    private ArrayList<Playlist> data;
 
-    public PlaylistListAdapter(ArrayList<Playlist> data, Context context) {
+    public PlaylistListAdapter() {
         super();
-        this.data = data;
+    }
+
+    public void setData(Context context, ArrayList<Playlist> data) {
         this.context = context;
+        this.data = data;
     }
 
     @Override
@@ -35,7 +37,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
     @Override
     public void onBindViewHolder(PlaylistListAdapter.PlaylistViewHolder holder, int position) {
         Playlist playlist = data.get(position);
-        //holder.cover.setImageBitmap();
         holder.name.setText(playlist.getName());
     }
 
@@ -46,7 +47,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
 
     class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView cover;
         public TextView name;
 
         public PlaylistViewHolder(View itemView) {
@@ -58,15 +58,12 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
         @Override
         public void onClick(View v) {
             int position = getLayoutPosition();
-            Playlist playlist = data.get(position);
-            //Delete
-            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
-            itemClick.onPlaylistListItemClick(playlist.getId());
 
-            /*Intent intent = new Intent(context, CustomTrackListActivity.class);
-            intent.putExtra("PLAYLIST_NAME",playlist.getName());
-            intent.putExtra("PLAYLIST_ID",playlist.getId());
-            context.startActivity(intent);*/
+            Intent intent = new Intent(context, CustomTrackListActivity.class);
+            intent.putExtra("CHOICE_MODE", "PLAYLIST");
+            intent.putExtra("PLAYLIST_NAME", data.get(position).getName());
+            intent.putExtra("PLAYLIST_ID", data.get(position).getId());
+            context.startActivity(intent);
         }
     }
 

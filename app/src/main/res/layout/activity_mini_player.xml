@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_mini_player_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,14 +16,17 @@
         android:scaleType="centerCrop"
         android:src="@drawable/activity_red_line_rotate" />
 
-    <ImageView
+    <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/activity_mini_player_album_art"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/activity_mini_player_red_line"
         android:layout_margin="5dp"
-        android:src="@drawable/cover" />
+        ghplayer:siBorderColor="@color/color_album_art_border"
+        ghplayer:siBorderWidth="3dp"
+        ghplayer:siRadius="6dp"
+        ghplayer:siSquare="true" />
 
     <TextView
         android:id="@+id/activity_mini_player_title"
@@ -46,12 +50,12 @@
         android:layout_alignBottom="@id/activity_mini_player_album_art"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_toRightOf="@id/activity_mini_player_album_art"
-        android:orientation="horizontal">
+        android:layout_toRightOf="@id/activity_mini_player_album_art">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_centerHorizontal="true">
 
             <Button
@@ -66,6 +70,12 @@
                 android:background="@drawable/selector_player_button_pause" />
 
             <Button
+                android:id="@+id/activity_mini_player_button_play"
+                style="@style/activity_mini_player_buttons_style"
+                android:background="@drawable/selector_player_button_play"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/activity_mini_player_button_stop"
                 style="@style/activity_mini_player_buttons_style"
                 android:background="@drawable/selector_player_button_stop" />
@@ -76,7 +86,6 @@
                 android:background="@drawable/selector_player_button_next" />
 
         </LinearLayout>
-
 
     </RelativeLayout>
 

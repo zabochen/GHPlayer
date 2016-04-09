@@ -21,7 +21,6 @@ public class ArtistInfoLoader extends AsyncTask<String, Void, ArtistInfo> {
     private static final String SITE_URL = "http://ws.audioscrobbler.com/2.0/?method=";
     private static final String ARTIST_GET_INFO_METHOD = "artist.getinfo&artist=";
     private static final String DATA_FORMAT = "&format=json";
-    private static final String LANGUARE = "&lang=ru";
     private Context context;
     private String content;
     private String summary;
@@ -41,7 +40,6 @@ public class ArtistInfoLoader extends AsyncTask<String, Void, ArtistInfo> {
                 .append(artistName)
                 .append(API_KEY)
                 .append(DATA_FORMAT)
-                .append(LANGUARE)
                 .toString();
 
         try {

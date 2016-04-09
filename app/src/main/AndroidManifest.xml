@@ -25,6 +25,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.GenreTrackListActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".activities.PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -42,7 +51,9 @@
             android:name=".activities.ArtistInfoActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.CustomTrackListActivity"/>
+        <activity
+            android:name=".activities.CustomTrackListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Music Service -->
         <service

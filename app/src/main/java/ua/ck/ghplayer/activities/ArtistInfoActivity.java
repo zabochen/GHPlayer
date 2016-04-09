@@ -36,8 +36,9 @@ public class ArtistInfoActivity extends AppCompatActivity {
 
         getExtraBundle();
         setToolbar();
-        setAlbumListView();
         setAlbumInfoContentView();
+        setAlbumListView();
+
 
     }
 
@@ -124,8 +125,8 @@ public class ArtistInfoActivity extends AppCompatActivity {
 
         Picasso.with(this)
                 .load(artistInfo.getArtistArtUrl())
-                .placeholder(R.drawable.bg_default_album_art)
-                .error(R.drawable.bg_default_album_art)
+                .placeholder(R.drawable.album_cover_default)
+                .error(R.drawable.album_cover_default)
                 .into(cover);
     }
 }

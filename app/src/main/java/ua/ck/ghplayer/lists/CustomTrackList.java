@@ -18,6 +18,7 @@ public class CustomTrackList {
     }
 
     public void setCustomTrackList(Cursor cursor){
+        customTrackList.clear();
         if (cursor != null && cursor.moveToFirst()) {
             cursor.moveToFirst();
             do {
@@ -37,6 +38,5 @@ public class CustomTrackList {
     public ArrayList<Track> getCustomTrackList() {
         return customTrackList;
     }
-
 
 }
