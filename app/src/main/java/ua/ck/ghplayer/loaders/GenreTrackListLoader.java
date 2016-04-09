@@ -20,7 +20,7 @@ public class GenreTrackListLoader extends CursorLoader {
             MediaStore.Audio.Genres.Members.DURATION
     };
     private String selection = MediaStore.Audio.Genres.Members.IS_MUSIC + " != 0";
-
+    private String sortOrder = MediaStore.Audio.Genres.Members.TITLE + " ASC";
 
     public GenreTrackListLoader(Context context, long genreId) {
         super(context);
@@ -31,7 +31,7 @@ public class GenreTrackListLoader extends CursorLoader {
     @Override
     public Cursor loadInBackground() {
         ContentResolver contentResolver = context.getContentResolver();
-        Cursor cursor = contentResolver.query(uriExternalContent, projection, selection, null, null);
+        Cursor cursor = contentResolver.query(uriExternalContent, projection, selection, null, sortOrder);
         return cursor;
     }
 

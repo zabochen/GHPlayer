@@ -1,12 +1,10 @@
 package ua.ck.ghplayer;
 
+import android.content.SharedPreferences;
+
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import ua.ck.ghplayer.utils.Constants;
 
 public class Application extends android.app.Application {

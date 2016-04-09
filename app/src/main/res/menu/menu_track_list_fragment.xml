@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ghplayer="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_track_list_fragment_sorting"
-        android:orderInCategory="2"
+        android:icon="@drawable/toolbar_menu_item_sorting"
+        android:orderInCategory="1"
         android:title="@string/menu_fragments_sorting_title"
-        ghplayer:showAsAction="never"/>
+        ghplayer:showAsAction="always" />
 
 </menu>

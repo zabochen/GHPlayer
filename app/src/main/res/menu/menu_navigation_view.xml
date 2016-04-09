@@ -12,28 +12,28 @@
 
                 <item
                     android:id="@+id/menu_navigation_view_item_tracks"
-                    android:icon="@android:drawable/ic_dialog_email"
+                    android:icon="@drawable/icon_navigation_view_item_tracks"
                     android:title="@string/menu_navigation_view_item_tracks" />
 
                 <item
                     android:id="@+id/menu_navigation_view_item_albums"
-                    android:icon="@android:drawable/ic_dialog_email"
+                    android:icon="@drawable/icon_navigation_view_item_albums"
                     android:title="@string/menu_navigation_view_item_albums" />
 
                 <item
                     android:id="@+id/menu_navigation_view_item_artists"
-                    android:icon="@android:drawable/ic_dialog_email"
+                    android:icon="@drawable/icon_navigation_view_item_artists"
                     android:title="@string/menu_navigation_view_item_artists" />
 
                 <item
                     android:id="@+id/menu_navigation_view_item_genres"
-                    android:icon="@android:drawable/ic_dialog_email"
+                    android:icon="@drawable/icon_navigation_view_item_genres"
                     android:title="@string/menu_navigation_view_item_genres" />
 
                 <item
-                    android:id="@+id/menu_navigation_view_item_playlists"
-                    android:icon="@android:drawable/ic_dialog_email"
-                    android:title="@string/menu_navigation_view_item_playlists" />
+                    android:id="@+id/menu_navigation_view_item_favorites"
+                    android:icon="@drawable/icon_navigation_view_item_favorite"
+                    android:title="@string/menu_navigation_view_item_favorites" />
 
             </group>
 

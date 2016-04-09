@@ -14,10 +14,10 @@
             android:id="@+id/notification_player_album_art"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/cover" />
+            android:src="@drawable/album_cover_default" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -75,7 +75,7 @@
                     android:layout_height="32dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/selector_player_button_play"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/notification_player_button_stop"

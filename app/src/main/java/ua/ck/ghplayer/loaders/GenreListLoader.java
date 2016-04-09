@@ -16,6 +16,7 @@ public class GenreListLoader extends CursorLoader {
             MediaStore.Audio.Genres.NAME
     };
     private String selection = MediaStore.Audio.Genres.NAME + " != ''";
+    private String sortOrder = MediaStore.Audio.Genres.NAME + " ASC";
 
     public GenreListLoader(Context context) {
         super(context);
@@ -25,7 +26,7 @@ public class GenreListLoader extends CursorLoader {
     @Override
     public Cursor loadInBackground() {
         ContentResolver contentResolver = context.getContentResolver();
-        Cursor cursor = contentResolver.query(uriExternalContent, projection, selection, null, null);
+        Cursor cursor = contentResolver.query(uriExternalContent, projection, selection, null, sortOrder);
         return cursor;
     }
 
