@@ -44,7 +44,8 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
         Artist artist = data.get(position);
 
         Picasso.with(context)
-                .load(artist.getArtistArtUrl())
+                //.load(artist.getArtistArtUrl())
+                .load(R.drawable.bg_default_album_art)
                 .placeholder(R.drawable.bg_default_album_art)
                 .error(R.drawable.bg_default_album_art)
                 .into(holder.cover);

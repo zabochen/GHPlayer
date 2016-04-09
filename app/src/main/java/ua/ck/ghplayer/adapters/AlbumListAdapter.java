@@ -83,13 +83,13 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         public void onClick(View v) {
             int position = getLayoutPosition();
             Album album = data.get(position);
-            // Delete
+            /*// Delete
             try{
 
                 ItemClickFragmentSetter itemClick =  (ItemClickFragmentSetter) context;
                 itemClick.onAlbumListItemClick(album.getAlbum(), (int)album.getId());
             } catch (ClassCastException e) {
-            }
+            }*/
 
             /*Intent intent = new Intent(context, CustomTrackListActivity.class);
             intent.putExtra("ALBUM_NAME", album.getAlbum());

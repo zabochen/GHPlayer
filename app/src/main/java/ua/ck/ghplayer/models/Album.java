@@ -25,15 +25,13 @@ public class Album {
     private long id;
     private String album;
     private String artist;
-    private String albumArt;
     private int numberOfSongs;
     private int firstYear;
 
-    public Album(long id, String album, String artist, String albumArt, int numberOfSongs, int firstYear) {
+    public Album(long id, String album, String artist, int numberOfSongs, int firstYear) {
         this.id = id;
         this.album = album;
         this.artist = artist;
-        this.albumArt = albumArt;
         this.numberOfSongs = numberOfSongs;
         this.firstYear = firstYear;
     }
@@ -42,7 +40,6 @@ public class Album {
         this.id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID));
         this.album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
         this.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST));
-        this.albumArt = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART));
         this.numberOfSongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
         this.firstYear = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.FIRST_YEAR));
     }
@@ -57,10 +54,6 @@ public class Album {
 
     public String getArtist() {
         return artist;
-    }
-
-    public String getAlbumArt() {
-        return albumArt;
     }
 
     public int getNumberOfSongs() {

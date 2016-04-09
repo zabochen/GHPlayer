@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import ua.ck.ghplayer.R;
-import ua.ck.ghplayer.lists.GenreList;
 import ua.ck.ghplayer.lists.GenreTrackList;
-import ua.ck.ghplayer.lists.TrackList;
 
 public class GenreTrackListAdapter extends RecyclerView.Adapter<GenreTrackListAdapter.MyViewHolder> {
 

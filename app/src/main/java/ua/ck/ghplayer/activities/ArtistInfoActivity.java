@@ -36,8 +36,9 @@ public class ArtistInfoActivity extends AppCompatActivity {
 
         getExtraBundle();
         setToolbar();
-        setAlbumListView();
         setAlbumInfoContentView();
+        setAlbumListView();
+
 
     }
 
