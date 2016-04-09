@@ -13,6 +13,7 @@ public class GenreTrackList {
 
     private static GenreTrackList instance;
     private static ArrayList<Track> genreTrackList;
+    private static ArrayList<Track> saveGenreTrackList;
 
     private GenreTrackList() {
     }
@@ -45,6 +46,15 @@ public class GenreTrackList {
 
     public ArrayList<Track> getGenreTrackList() {
         return genreTrackList != null ? genreTrackList : null;
+    }
+
+    public void saveGenreTrackList() {
+        saveGenreTrackList = new ArrayList<>();
+        saveGenreTrackList.addAll(genreTrackList);
+    }
+
+    public ArrayList<Track> getSaveGenreTrackList() {
+        return saveGenreTrackList != null ? saveGenreTrackList : null;
     }
 
 }

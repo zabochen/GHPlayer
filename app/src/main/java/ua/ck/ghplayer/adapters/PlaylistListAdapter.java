@@ -60,8 +60,8 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
             int position = getLayoutPosition();
             Playlist playlist = data.get(position);
             //Delete
-            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
-            itemClick.onPlaylistListItemClick(playlist.getId());
+            /*ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
+            itemClick.onPlaylistListItemClick(playlist.getId());*/
 
             /*Intent intent = new Intent(context, CustomTrackListActivity.class);
             intent.putExtra("PLAYLIST_NAME",playlist.getName());

@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,28 +17,32 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ua.ck.ghplayer.events.MiniPlayerButtonEvent;
 import ua.ck.ghplayer.events.NotificationPlayerEvent;
-import ua.ck.ghplayer.events.PausePlayerEvent;
-import ua.ck.ghplayer.events.PlayMiniPlayerEvent;
-import ua.ck.ghplayer.events.PlayPausePlayerEvent;
+import ua.ck.ghplayer.events.PlayerButtonEvent;
 import ua.ck.ghplayer.events.PlayerUpdateEvent;
-import ua.ck.ghplayer.events.StopMiniPlayerEvent;
 import ua.ck.ghplayer.events.TouchProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
+import ua.ck.ghplayer.events.UpdateTrackContentEvent;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.notification.NotificationPlayer;
 import ua.ck.ghplayer.utils.Constants;
+import ua.ck.ghplayer.utils.ServiceUtils;
 
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener {
 
-    private EventBus eventBus = EventBus.getDefault();
-    private MediaPlayer mediaPlayer;
     private Uri trackUri;
+    private MediaPlayer mediaPlayer;
+    private EventBus eventBus = EventBus.getDefault();
     private Handler handlerUpdateProgressBar = new Handler();
 
-    private int trackListId;                            // What "TrackList" we work
-    private static int miniPlayerTrackPosition;         // Selected "Track"
+    // TrackList & Track Position
+    private int trackListId;           // What "TrackList" we work
+    private int trackPosition;         // Selected "Track"
+
+    // Notification Player
+    private NotificationPlayer notificationPlayer;
 
     // Update ProgressBar
     private Runnable updateTimeTask = new Runnable() {
@@ -60,13 +63,20 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // Get MusicPlayer Intent
-        miniPlayerTrackPosition = intent.getIntExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, 0);
-        trackListId = intent.getIntExtra(Constants.TRACK_LISTS_ID_KEY, 0);
+        trackListId = intent.getIntExtra(Constants.TRACK_LIST_ID_KEY, 0);
+        trackPosition = intent.getIntExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, 0);
 
         // Track URI
         updateTrackUri();
 
+        // Play Track
         playMediaPlayer();
+
+        // Start Notification Player
+        if (ServiceUtils.musicServiceRunning(getApplicationContext(), MusicService.class)) {
+            eventBus.post(new NotificationPlayerEvent(Constants.MUSIC_SERVICE_SENDER_ID, Constants.NOTIFICATION_PLAYER_START));
+        }
+
         return START_NOT_STICKY;
     }
 
@@ -82,31 +92,31 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     }
 
     // Create or Update Track URI
-
     public void updateTrackUri() {
         switch (trackListId) {
             case (Constants.MAIN_TRACK_LIST_ID):
                 trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        TrackList.getInstance().getTrackList().get(miniPlayerTrackPosition).getId());
+                        TrackList.getInstance().getTrackList().get(trackPosition).getId());
                 break;
             case (Constants.ALBUM_TRACK_LIST_ID):
+                // ADD
                 break;
             case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                // ADD
                 break;
             case (Constants.GENRE_TRACK_LIST_ID):
                 trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        GenreTrackList.getInstance().getGenreTrackList().get(miniPlayerTrackPosition).getId());
+                        GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getId());
+                break;
+            case (Constants.FAVORITE_TRACK_LIST_ID):
+                // ADD
                 break;
         }
     }
 
-    private void releaseMediaPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            handlerUpdateProgressBar.removeCallbacks(updateTimeTask);
-            mediaPlayer = null;
-        }
-    }
+    // ---------------------------------------------------------------------------------------------
+    // Media Player Method's
+    // ---------------------------------------------------------------------------------------------
 
     private void playMediaPlayer() {
         releaseMediaPlayer();
@@ -122,6 +132,36 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         }
     }
 
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            handlerUpdateProgressBar.removeCallbacks(updateTimeTask);
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+//        switch (trackListId) {
+//            case (Constants.MAIN_TRACK_LIST_ID):
+//                nextTrack(TrackList.getInstance().getTrackList());
+//                break;
+//            case (Constants.ALBUM_TRACK_LIST_ID):
+//                // ADD
+//                break;
+//            case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+//                // ADD
+//                break;
+//            case (Constants.GENRE_TRACK_LIST_ID):
+//                nextTrack(GenreTrackList.getInstance().getSaveGenreTrackList());
+//                break;
+//            case (Constants.FAVORITE_TRACK_LIST_ID):
+//                // ADD
+//                break;
+//        }
+        eventBus.post(new NotificationPlayerEvent(Constants.MUSIC_SERVICE_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_NEXT));
+    }
+
     private void pauseMediaPlayer() {
         mediaPlayer.pause();
     }
@@ -131,30 +171,34 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     }
 
     public void nextTrack(ArrayList trackList) {
-        if (miniPlayerTrackPosition < (trackList.size() - 1)) {
-            miniPlayerTrackPosition += 1;
+        if (trackPosition < (trackList.size() - 1)) {
+            trackPosition += 1;
             updateTrackUri();
-            handlerUpdateProgressBar.removeCallbacks(updateTimeTask);
+            releaseMediaPlayer();
             playMediaPlayer();
             updateProgressBar();
         } else {
-            miniPlayerTrackPosition = 0;
+            trackPosition = 0;
             updateTrackUri();
-            handlerUpdateProgressBar.removeCallbacks(updateTimeTask);
+            releaseMediaPlayer();
             playMediaPlayer();
             updateProgressBar();
         }
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        switch (trackListId) {
-            case (Constants.MAIN_TRACK_LIST_ID):
-                nextTrack(TrackList.getInstance().getTrackList());
-                break;
-            case (Constants.GENRE_TRACK_LIST_ID):
-                nextTrack(GenreTrackList.getInstance().getGenreTrackList());
-                break;
+    public void previousTrack(ArrayList trackList) {
+        if (trackPosition > 0) {
+            trackPosition -= 1;
+            updateTrackUri();
+            releaseMediaPlayer();
+            playMediaPlayer();
+            updateProgressBar();
+        } else {
+            trackPosition = (trackList.size() - 1);
+            updateTrackUri();
+            releaseMediaPlayer();
+            playMediaPlayer();
+            updateProgressBar();
         }
     }
 
@@ -183,58 +227,261 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         }
     }
 
-    @Subscribe
-    public void onPlayMiniPlayerEvent(PlayMiniPlayerEvent event) {
-        playMediaPlayer();
-    }
-
-    @Subscribe
-    public void onStopMiniPlayerEvent(StopMiniPlayerEvent event) {
-        mediaPlayer.stop();
-    }
-
-    @Subscribe
-    public void onPausePlayerEvent(PausePlayerEvent event) {
-        pauseMediaPlayer();
-    }
-
-    @Subscribe
-    public void onPlayPausePlayerEvent(PlayPausePlayerEvent event) {
-        playPauseMediaPlayer();
-    }
-
     // ---------------------------------------------------------------------------------------------
-    // Notification
+    // Notification Player
     // ---------------------------------------------------------------------------------------------
 
     @Subscribe
     public void onNotificationPlayerEvent(NotificationPlayerEvent event) {
 
-        NotificationPlayer notificationPlayer = new NotificationPlayer(getApplicationContext());
+        notificationPlayer = new NotificationPlayer(getApplicationContext());
 
         switch (event.getButtonIntentFilter()) {
+
+            // -------------------------------------------------------------------------------------
+            // Start Notification Player
+            // -------------------------------------------------------------------------------------
+
             case (Constants.NOTIFICATION_PLAYER_START):
-                notificationPlayer.startNotificationPlayer("");
+                switch (trackListId) {
+                    case (Constants.MAIN_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_EMPTY,
+                                TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.GENRE_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_EMPTY,
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.FAVORITE_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                }
                 break;
+
+            // -------------------------------------------------------------------------------------
+            // Play Button Notification Player
+            // -------------------------------------------------------------------------------------
 
             case (Constants.NOTIFICATION_PLAYER_BUTTON_PLAY):
-                playPauseMediaPlayer();
-                notificationPlayer.startNotificationPlayer(Constants.NOTIFICATION_PLAYER_BUTTON_PLAY);
+                switch (trackListId) {
+                    case (Constants.MAIN_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PLAY,
+                                TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.GENRE_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PLAY,
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.FAVORITE_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                }
+
+                switch (event.getSenderId()) {
+                    case (Constants.BROADCAST_SENDER_ID):
+                        playPauseMediaPlayer();
+                        eventBus.post(new MiniPlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.MINI_PLAYER_BUTTON_PLAY));
+                        eventBus.post(new PlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.PLAYER_BUTTON_PLAY));
+                        break;
+                    case (Constants.MINI_PLAYER_SENDER_ID):
+                        playPauseMediaPlayer();
+                        break;
+                    case (Constants.PLAYER_SENDER_ID):
+                        playPauseMediaPlayer();
+                        break;
+                    case (Constants.MAIN_ACTIVITY_SENDER_ID):
+                        // Update Notification Player - Set active button Pause
+                        break;
+                }
+
                 break;
 
+            // -------------------------------------------------------------------------------------
+            // Pause Button Notification Player
+            // -------------------------------------------------------------------------------------
+
             case (Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE):
+                switch (trackListId) {
+                    case (Constants.MAIN_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE,
+                                TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.GENRE_TRACK_LIST_ID):
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE,
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.FAVORITE_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                }
+
+                // Pause Track
                 pauseMediaPlayer();
-                notificationPlayer.startNotificationPlayer(Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE);
+
+                switch (event.getSenderId()) {
+                    case (Constants.BROADCAST_SENDER_ID):
+                        eventBus.post(new MiniPlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.MINI_PLAYER_BUTTON_PAUSE));
+                        eventBus.post(new PlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.PLAYER_BUTTON_PAUSE));
+                        break;
+                }
+
                 break;
+
+            // -------------------------------------------------------------------------------------
+            // Stop Button Notification Player
+            // -------------------------------------------------------------------------------------
 
             case (Constants.NOTIFICATION_PLAYER_BUTTON_STOP):
                 mediaPlayer.stop();
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-                notificationManager.cancel(8);
-                getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                notificationPlayer.stopNotificationPlayer();
+                stopMusicService();
+
+                switch (event.getSenderId()) {
+                    case (Constants.BROADCAST_SENDER_ID):
+                        eventBus.post(new MiniPlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.MINI_PLAYER_BUTTON_STOP));
+                        break;
+                }
                 break;
 
+            // -------------------------------------------------------------------------------------
+            // Next Button Notification Player
+            // -------------------------------------------------------------------------------------
+
+            case (Constants.NOTIFICATION_PLAYER_BUTTON_NEXT):
+                switch (trackListId) {
+                    case (Constants.MAIN_TRACK_LIST_ID):
+                        nextTrack(TrackList.getInstance().getTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_NEXT,
+                                TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.GENRE_TRACK_LIST_ID):
+                        nextTrack(GenreTrackList.getInstance().getGenreTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_NEXT,
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.FAVORITE_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                }
+
+                // Update track content
+                eventBus.post(new UpdateTrackContentEvent(trackListId, trackPosition));
+
+                // Set active button Pause MiniPlayer
+                eventBus.post(new MiniPlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.MINI_PLAYER_BUTTON_NEXT));
+
+                // Set active button Pause Player
+                eventBus.post(new PlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.PLAYER_BUTTON_NEXT));
+
+                break;
+
+            // ---------------------------------------------------------------------------------------------
+            // Previous Button Notification Player
+            // ---------------------------------------------------------------------------------------------
+
+            case (Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS):
+                switch (trackListId) {
+                    case (Constants.MAIN_TRACK_LIST_ID):
+                        previousTrack(TrackList.getInstance().getTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS,
+                                TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                    case (Constants.GENRE_TRACK_LIST_ID):
+                        previousTrack(GenreTrackList.getInstance().getSaveGenreTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS,
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
+                        );
+                        break;
+                    case (Constants.FAVORITE_TRACK_LIST_ID):
+                        // ADD
+                        break;
+                }
+
+                // Update track content
+                eventBus.post(new UpdateTrackContentEvent(trackListId, trackPosition));
+
+                // Set active button Pause MiniPlayer
+                eventBus.post(new MiniPlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.MINI_PLAYER_BUTTON_PREVIOUS));
+
+                // Set active button Pause Player
+                eventBus.post(new PlayerButtonEvent(Constants.NOTIFICATION_PLAYER_SENDER_ID, Constants.PLAYER_BUTTON_PREVIOUS));
+
+                break;
         }
+    }
+
+    public void stopMusicService() {
+        Intent musicServiceStopIntent = new Intent(getApplicationContext(), MusicService.class);
+        stopService(musicServiceStopIntent);
     }
 
     @Override
@@ -242,6 +489,5 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         eventBus.unregister(this);
         super.onDestroy();
     }
-
 
 }

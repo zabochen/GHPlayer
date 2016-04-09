@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +40,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
                     .into(holder.albumArt);
         } else {
             Picasso.with(context)
-                    .load(R.mipmap.ic_launcher)
+                    .load(R.drawable.album_cover_default)
                     .into(holder.albumArt);
         }
     }
@@ -47,6 +48,14 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.MyVi
     @Override
     public int getItemCount() {
         return TrackList.getInstance().getTrackList() != null ? TrackList.getInstance().getTrackList().size() : 0;
+    }
+
+    public void addToPlaylist(int position) {
+        Toast.makeText(
+                context,
+                "Add: " + String.valueOf(TrackList.getInstance().getTrackList().get(position).getId()),
+                Toast.LENGTH_LONG)
+                .show();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

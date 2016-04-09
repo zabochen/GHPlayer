@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!-- AppTheme.NoActionBar -->
-    <color name="color_control_normal">#8ec3d9</color>
+    <color name="color_control_normal">#9b909b</color>
 
     <!-- Toolbar -->
     <color name="color_toolbar_title">#cccccc</color>
@@ -22,7 +22,7 @@
     <color name="color_divider">#2d2c35</color>
 
     <!-- AlbumArt Border -->
-    <color name="color_album_art_border">#474653</color>
+    <color name="color_album_art_border">#2d2c35</color>
 
     <!-- Mini Player -->
     <color name="color_activity_mini_player_track_title">#9d9d9e</color>

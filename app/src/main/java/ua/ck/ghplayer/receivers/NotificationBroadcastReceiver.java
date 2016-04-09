@@ -19,11 +19,15 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         String notificationRequest = intent.getAction();
 
         if (notificationRequest.equals(Constants.NOTIFICATION_PLAYER_BUTTON_PLAY)) {
-            eventBus.post(new NotificationPlayerEvent(Constants.NOTIFICATION_PLAYER_BUTTON_PLAY));
+            eventBus.post(new NotificationPlayerEvent(Constants.BROADCAST_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_PLAY));
         } else if (notificationRequest.equals(Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE)) {
-            eventBus.post(new NotificationPlayerEvent(Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE));
+            eventBus.post(new NotificationPlayerEvent(Constants.BROADCAST_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE));
         } else if (notificationRequest.equals(Constants.NOTIFICATION_PLAYER_BUTTON_STOP)) {
-            eventBus.post(new NotificationPlayerEvent(Constants.NOTIFICATION_PLAYER_BUTTON_STOP));
+            eventBus.post(new NotificationPlayerEvent(Constants.BROADCAST_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_STOP));
+        } else if (notificationRequest.equals(Constants.NOTIFICATION_PLAYER_BUTTON_NEXT)) {
+            eventBus.post(new NotificationPlayerEvent(Constants.BROADCAST_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_NEXT));
+        } else if (notificationRequest.equals(Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS)) {
+            eventBus.post(new NotificationPlayerEvent(Constants.BROADCAST_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS));
         }
     }
 }

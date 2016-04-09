@@ -2,15 +2,19 @@
 
     <string name="app_name">GHPlayer</string>
 
-    <!-- Menu Main -->
-    <string name="menu_main_sort">Сортування</string>
-
     <!-- Menu Navigation View -->
     <string name="menu_navigation_view_item_albums">Альбоми</string>
     <string name="menu_navigation_view_item_artists">Виконавці</string>
     <string name="menu_navigation_view_item_genres">Жанри</string>
     <string name="menu_navigation_view_item_navigation">Навігація</string>
-    <string name="menu_navigation_view_item_playlists">Списки</string>
     <string name="menu_navigation_view_item_tracks">Треки</string>
+    <string name="menu_navigation_view_item_favorites">Улюблене</string>
+    <string name="toggle_navigation_view_close">Закрити</string>
+    <string name="toggle_navigation_view_open">Відкрити</string>
+    <string name="menu_fragments_sorting_title">Сортування</string>
+    <string name="menu_fragments_sorting_dialog_button_descending">По убуванню</string>
+    <string name="menu_fragments_sorting_dialog_button_ascending">По наростанню</string>
+    <string name="activity_player_duration_track_time_title">Час</string>
+    <string name="activity_player_duration_track_elapsed_time_title">Пройшло</string>
 
 </resources>

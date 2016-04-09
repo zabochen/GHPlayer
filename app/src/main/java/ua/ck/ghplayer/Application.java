@@ -1,10 +1,6 @@
 package ua.ck.ghplayer;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.provider.MediaStore;
 
 import io.realm.RealmConfiguration;
 import ua.ck.ghplayer.utils.Constants;
