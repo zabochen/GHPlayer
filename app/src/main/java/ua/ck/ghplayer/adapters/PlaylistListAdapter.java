@@ -1,6 +1,7 @@
 package ua.ck.ghplayer.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,12 @@ import ua.ck.ghplayer.models.Playlist;
 
 public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder> {
     private ArrayList<Playlist> data;
-    private Activity parentActivity;
+    private Context context;
 
-    public PlaylistListAdapter(ArrayList<Playlist> data, Activity parentActivity) {
+    public PlaylistListAdapter(ArrayList<Playlist> data, Context context) {
         super();
         this.data = data;
-        this.parentActivity = parentActivity;
+        this.context = context;
     }
 
     @Override
@@ -44,13 +45,12 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
     }
 
 
-    class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class PlaylistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView cover;
         public TextView name;
 
         public PlaylistViewHolder(View itemView) {
             super(itemView);
-            this.cover = (ImageView) itemView.findViewById(R.id.item_playlist_list_cover);
             this.name = (TextView) itemView.findViewById(R.id.item_playlist_list_name);
             itemView.setOnClickListener(this);
         }
@@ -59,8 +59,14 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
         public void onClick(View v) {
             int position = getLayoutPosition();
             Playlist playlist = data.get(position);
-            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) parentActivity;
+            //Delete
+            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
             itemClick.onPlaylistListItemClick(playlist.getId());
+
+            /*Intent intent = new Intent(context, CustomTrackListActivity.class);
+            intent.putExtra("PLAYLIST_NAME",playlist.getName());
+            intent.putExtra("PLAYLIST_ID",playlist.getId());
+            context.startActivity(intent);*/
         }
     }
 

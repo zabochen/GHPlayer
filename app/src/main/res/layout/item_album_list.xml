@@ -1,78 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:layout_marginBottom="10dp"
     android:background="?android:attr/selectableItemBackground"
-    android:layout_marginBottom="10dp">
-
-    <ImageView
-        android:id="@+id/item_album_list_cover"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_gravity="center_horizontal|center_vertical"/>
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.github.siyamed.shapeimageview.RoundedImageView
+            android:id="@+id/item_album_list_cover"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+            android:layout_marginTop="10dp"
+            android:singleLine="false"
+            ghplayer:siBorderColor="@color/color_divider"
+            ghplayer:siBorderWidth="3dp"
+            ghplayer:siRadius="6dp"
+            ghplayer:siSquare="true" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_album_list_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="false"
                 android:textColor="@color/color_item_track_list_text"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/item_album_list_first_year"
-                android:textColor="@color/color_item_track_list_text" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/item_album_list_artist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_item_track_list_text"
-            android:textSize="12sp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/item_album_list_number_of_songs"
-                android:layout_width="wrap_content"
+                android:id="@+id/item_album_list_artist"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_item_track_list_text"
-                android:textSize="12sp"
-                android:layout_marginBottom="10dp"/>
+                android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=" tracks"
-                android:textColor="@color/color_item_track_list_text" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/item_album_list_number_of_songs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" tracks available"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <View style="@style/Divider" />
-
     </LinearLayout>
+
+    <View style="@style/Divider" />
 
 </LinearLayout>

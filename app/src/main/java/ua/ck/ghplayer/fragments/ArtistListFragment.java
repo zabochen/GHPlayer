@@ -44,10 +44,11 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
 
         artistListRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_list_recycler_view);
         artistListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //RecyclerViewTouchListener artistListTouchListener = new RecyclerViewTouchListener(getContext(), this, artistListRecyclerView);
-        //artistListRecyclerView.addOnItemTouchListener(artistListTouchListener);
         artistListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        artistListRecyclerView.setHasFixedSize(true);
+
+        artistListAdapter = new ArtistListAdapter();
+        artistListRecyclerView.setAdapter(artistListAdapter);
     }
 
     @Override
@@ -65,10 +66,10 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
             ArtistList artistList = ArtistList.getInstance();
-            artistList.setArtistList(data);
-            artistListAdapter = new ArtistListAdapter(artistList.getArtistList(),getActivity());
+            artistList.setArtistList(getActivity(), data);
+            artistListAdapter.setData(getContext(), artistList.getArtistList());
 
-            artistListRecyclerView.setAdapter(artistListAdapter);
+            artistListRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 

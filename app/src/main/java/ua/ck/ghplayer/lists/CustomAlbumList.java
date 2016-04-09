@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import ua.ck.ghplayer.models.Album;
 
-public class AlbumList {
-    private static AlbumList ourInstance = new AlbumList();
+public class CustomAlbumList {
+    private static CustomAlbumList ourInstance = new CustomAlbumList();
     private static ArrayList<Album> albumList = new ArrayList<>();
 
-    private AlbumList() {
+    private CustomAlbumList() {
     }
 
-    public static AlbumList getInstance() {
+    public static CustomAlbumList getInstance() {
         return ourInstance;
     }
 

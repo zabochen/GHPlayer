@@ -1,4 +1,4 @@
-package ua.ck.ghplayer.utils;
+package ua.ck.ghplayer.loaders;
 
 
 import android.content.Context;
@@ -13,8 +13,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import ua.ck.ghplayer.models.ArtistInfo;
+import ua.ck.ghplayer.utils.InternetConnectionHelper;
 
-public class ArtistInfoAsyncLoader extends AsyncTask<String, Void, ArtistInfo> {
+public class ArtistInfoLoader extends AsyncTask<String, Void, ArtistInfo> {
     //http://www.last.fm/api/show/artist.getInfo
     private static final String API_KEY = "&api_key=c24471232c0e5a6ca4ba598c3a5bc6bb";
     private static final String SITE_URL = "http://ws.audioscrobbler.com/2.0/?method=";
@@ -22,10 +23,11 @@ public class ArtistInfoAsyncLoader extends AsyncTask<String, Void, ArtistInfo> {
     private static final String DATA_FORMAT = "&format=json";
     private static final String LANGUARE = "&lang=ru";
     private Context context;
+    private String content;
     private String summary;
     private String artistArtUrl;
 
-    public ArtistInfoAsyncLoader(Context context) {
+    public ArtistInfoLoader(Context context) {
         this.context = context;
     }
 
@@ -49,15 +51,26 @@ public class ArtistInfoAsyncLoader extends AsyncTask<String, Void, ArtistInfo> {
                 try {
                     String jsonResponse = InternetConnectionHelper.convertStreamToString(url.openStream());
                     JSONObject jsonObject = new JSONObject(jsonResponse);
-
-                    String rawSummary = jsonObject.getJSONObject("artist").getJSONObject("bio").getString("content");
+                    // Get summary information
+                    String rawSummary = jsonObject.getJSONObject("artist").getJSONObject("bio").getString("summary");
                     summary = rawSummary.split("<a href")[0];
 
+                    // Get full content information
+                    String rawContent = jsonObject.getJSONObject("artist").getJSONObject("bio").getString("content");
+                    content = rawContent.split("<a href")[0];
+
+                    //Get artist image url
                     JSONArray imageArray = jsonObject.getJSONObject("artist").getJSONArray("image");
 
-                    int imageSize = imageArray.length();
-                    JSONObject imageObject = imageSize > 2 ? imageArray.getJSONObject(imageSize - 1) : imageArray.getJSONObject(0);
-                    artistArtUrl = imageObject.getString("#text");
+                    int imageArraySize = imageArray.length();
+                    if (imageArraySize == 0) {
+                        artistArtUrl = null;
+                    } else {
+                        JSONObject imageObject = imageArraySize > 2 ? imageArray.getJSONObject(imageArraySize - 1) : imageArray.getJSONObject(0);
+                        artistArtUrl = imageObject.getString("#text");
+                    }
+
+                    return new ArtistInfo(artistName, summary, content, artistArtUrl);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -70,7 +83,7 @@ public class ArtistInfoAsyncLoader extends AsyncTask<String, Void, ArtistInfo> {
             e.printStackTrace();
         }
 
-        return new ArtistInfo(summary, artistArtUrl);
+        return null;
     }
 
 }

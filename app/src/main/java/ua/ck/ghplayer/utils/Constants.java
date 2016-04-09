@@ -67,6 +67,8 @@ public class Constants {
     public static final int SHOW_GENRE_TRACK_LIST = 0;
     public static final String SHOW_GENRE_TRACK_LIST_BUNDLE_KEY = "show_genre_track_list";
 
+    public static final String SHOW_ALBUM_TRACK_LIST_BUNDLE_KEY = "show_album_track_list";
+
     // ---------------------------------------------------------------------------------------------
     // Events - Player Track List
     // ---------------------------------------------------------------------------------------------

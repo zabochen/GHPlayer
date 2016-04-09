@@ -1,20 +1,22 @@
 package ua.ck.ghplayer;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
-
-import android.content.Context;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.provider.MediaStore;
 
+import io.realm.RealmConfiguration;
 import ua.ck.ghplayer.utils.Constants;
+import ua.ck.ghplayer.utils.PlaylistUtils;
 
 public class Application extends android.app.Application {
+    public static RealmConfiguration realmConfiguration;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
 
         // Shared Preferences
         SharedPreferences sharedPreferences = getApplicationContext()
@@ -29,6 +31,12 @@ public class Application extends android.app.Application {
 
             sharedPreferencesEditor.apply();
         }
+
+        //Realm database
+        realmConfiguration = new RealmConfiguration.Builder(getApplicationContext()).name("default.realm").build();
+
+        //Check for the existence of favorite playlist or create it
+        PlaylistUtils.initFavoritePlaylist(getApplicationContext());
 
     }
 

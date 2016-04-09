@@ -1,6 +1,5 @@
 package ua.ck.ghplayer.models;
 
-import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -9,7 +8,6 @@ public class Album {
     //Constants for Album query
     public static final String[] projection = {
             MediaStore.Audio.Albums._ID,
-            MediaStore.Audio.Albums.ALBUM_KEY,
             MediaStore.Audio.Albums.ALBUM,
             MediaStore.Audio.Albums.ARTIST,
             MediaStore.Audio.Albums.ALBUM_ART,
@@ -20,18 +18,19 @@ public class Album {
     public static final Uri EXTERNAL_CONTENT_URI = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
     public static final Uri INTERNAL_CONTENT_URI = MediaStore.Audio.Albums.INTERNAL_CONTENT_URI;
 
+    public static String selection = MediaStore.Audio.Media.ARTIST_ID + "=?";
+    //MediaStore.Audio.Media.TITLE + " ASC"
+
     //Variables
-    private int id;
-    private String albumKey;
+    private long id;
     private String album;
     private String artist;
     private String albumArt;
     private int numberOfSongs;
     private int firstYear;
 
-    public Album(int id, String albumKey, String album, String artist, String albumArt, int numberOfSongs, int firstYear) {
+    public Album(long id, String album, String artist, String albumArt, int numberOfSongs, int firstYear) {
         this.id = id;
-        this.albumKey = albumKey;
         this.album = album;
         this.artist = artist;
         this.albumArt = albumArt;
@@ -40,8 +39,7 @@ public class Album {
     }
 
     public Album(Cursor cursor) {
-        this.id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID));
-        this.albumKey = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_KEY));
+        this.id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID));
         this.album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
         this.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST));
         this.albumArt = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART));
@@ -49,12 +47,8 @@ public class Album {
         this.firstYear = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.FIRST_YEAR));
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public String getAlbumKey() {
-        return albumKey;
     }
 
     public String getAlbum() {
@@ -77,8 +71,8 @@ public class Album {
         return firstYear;
     }
 
-    public Uri getAlbumCoverUri(){
-        return Uri.parse("content://media/external/audio/albumart/"+id);
+    public Uri getAlbumCoverUri() {
+        return Uri.parse("content://media/external/audio/albumart/" + id);
     }
 
 }

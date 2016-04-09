@@ -4,11 +4,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import ua.ck.ghplayer.utils.ArtistInfoUtils;
+
 public class Artist {
     //Constants for Artist query
     public static final String[] projection = {
             MediaStore.Audio.Artists._ID,
-            MediaStore.Audio.Artists.ARTIST_KEY,
             MediaStore.Audio.Artists.ARTIST,
             MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
             MediaStore.Audio.Artists.NUMBER_OF_TRACKS,
@@ -18,34 +19,31 @@ public class Artist {
     public static final Uri INTERNAL_CONTENT_URI = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
 
     //Variables
-    private int id;
-    private String artistKey;
+    private long id;
     private String artist;
     private int numberOfAlbums;
     private int numberOfTracks;
+    private String artistArtUrl;
 
-    public Artist(int id, String artistKey, String artist, int numberOfAlbums, int numberOfTracks) {
+
+    public Artist(long id, String artist, int numberOfAlbums, int numberOfTracks, String artistArtUrl) {
         this.id = id;
-        this.artistKey = artistKey;
         this.artist = artist;
         this.numberOfAlbums = numberOfAlbums;
         this.numberOfTracks = numberOfTracks;
+        this.artistArtUrl = artistArtUrl;
     }
 
-    public Artist(Cursor cursor) {
-        this.id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
-        this.artistKey = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST_KEY));
+    public Artist(Cursor cursor, String artistArtUrl) {
+        this.id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
         this.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
         this.numberOfAlbums = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));
         this.numberOfTracks = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS));
+        this.artistArtUrl = artistArtUrl;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public String getArtistKey() {
-        return artistKey;
     }
 
     public String getArtist() {
@@ -60,4 +58,7 @@ public class Artist {
         return numberOfTracks;
     }
 
+    public String getArtistArtUrl() {
+        return artistArtUrl;
+    }
 }

@@ -1,6 +1,8 @@
 package ua.ck.ghplayer.adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,20 +10,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.activities.ArtistInfoActivity;
 import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.models.Artist;
 
 public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder> {
+    private Context context;
     private ArrayList<Artist> data;
-    private Activity parentActivity;
 
-    public ArtistListAdapter(ArrayList<Artist> data, Activity parentActivity) {
+    public ArtistListAdapter() {
         super();
+    }
+
+    public void setData(Context context, ArrayList<Artist> data) {
+        this.context = context;
         this.data = data;
-        this.parentActivity = parentActivity;
     }
 
     @Override
@@ -34,7 +42,12 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
     @Override
     public void onBindViewHolder(ArtistListAdapter.ArtistViewHolder holder, int position) {
         Artist artist = data.get(position);
-        //holder.cover.setImageBitmap();
+
+        Picasso.with(context)
+                .load(artist.getArtistArtUrl())
+                .placeholder(R.drawable.bg_default_album_art)
+                .error(R.drawable.bg_default_album_art)
+                .into(holder.cover);
         holder.artist.setText(artist.getArtist());
         holder.numberOfAlbums.setText(String.valueOf(artist.getNumberOfAlbums()));
         holder.numberOfTracks.setText(String.valueOf(artist.getNumberOfTracks()));
@@ -65,8 +78,15 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
         public void onClick(View v) {
             int position = getLayoutPosition();
             Artist artist = data.get(position);
-            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) parentActivity;
-            itemClick.onArtistListItemClick(artist.getId(),artist.getArtist());
+            /*//Delete
+            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
+            itemClick.onArtistListItemClick((int)artist.getId(),artist.getArtist());
+*/
+
+            Intent intent = new Intent(context,ArtistInfoActivity.class);
+            intent.putExtra("ARTIST_NAME",artist.getArtist());
+            intent.putExtra("ARTIST_ID",artist.getId());
+            context.startActivity(intent);
         }
     }
 }

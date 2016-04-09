@@ -1,71 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-
-    <ImageView
-        android:id="@+id/item_artist_list_cover"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_gravity="center_horizontal|center_vertical"/>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_item_track_list_text"
-            android:id="@+id/item_artist_list_artist" />
+        <com.github.siyamed.shapeimageview.RoundedImageView
+            android:id="@+id/item_artist_list_cover"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal|center_vertical"
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_item_track_list_text"
-                android:id="@+id/item_artist_list_number_of_albums" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" albums"
-                android:textColor="@color/color_item_track_list_text" />
-        </LinearLayout>
+            android:layout_alignParentLeft="true"
+            ghplayer:siRadius="6dp"
+            ghplayer:siBorderWidth="3dp"
+            ghplayer:siBorderColor="@color/color_divider"
+            ghplayer:siSquare="true"/>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_item_track_list_text"
-                android:id="@+id/item_artist_list_number_of_tracks" />
+                android:id="@+id/item_artist_list_artist"
+                android:textSize="14dp" />
 
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" tracks"
-                android:textColor="@color/color_item_track_list_text" />
-        </LinearLayout>
+                android:layout_height="wrap_content">
 
-        <View style="@style/Divider"
-            android:layout_width="match_parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:id="@+id/item_artist_list_number_of_albums" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" albums"
+                    android:textColor="@color/color_item_track_list_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:id="@+id/item_artist_list_number_of_tracks" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" tracks"
+                    android:textColor="@color/color_item_track_list_text" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_width="match_parent" />
 
 
 </LinearLayout>

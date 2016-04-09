@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.models.ArtistInfo;
-import ua.ck.ghplayer.utils.ArtistInfoAsyncLoader;
+import ua.ck.ghplayer.loaders.ArtistInfoLoader;
 
 public class ArtistInfoFragment extends Fragment {
     private ArtistInfo artistInfo;
@@ -47,7 +47,7 @@ public class ArtistInfoFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         try {
-            artistInfo = new ArtistInfoAsyncLoader(getContext()).execute(artistName).get();
+            artistInfo = new ArtistInfoLoader(getContext()).execute(artistName).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -64,9 +64,11 @@ public class ArtistInfoFragment extends Fragment {
                 .into(cover);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("artistId",artistId);
-        AlbumListFragment albumList = new AlbumListFragment();
+        String[] str = new String[]{String.valueOf(artistId)};
+        bundle.putStringArray("ARTIST_ID",str);
 
+        AlbumListFragment albumList = new AlbumListFragment();
+        albumList.setArguments(bundle);
         FrameLayout artistAlbumList = (FrameLayout) view.findViewById(R.id.fragment_artist_info__album_list);
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
