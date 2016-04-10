@@ -22,7 +22,7 @@ public class NotificationPlayer {
         this.context = context;
     }
 
-    public void startNotificationPlayer(String pressButton, String title, String album, long albumId) {
+    public void startNotificationPlayer(String pressButton, String title, String artist, long albumId) {
 
         // Set "Big" Notification Layout
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_player);
@@ -80,7 +80,7 @@ public class NotificationPlayer {
         notification.flags = Notification.FLAG_ONGOING_EVENT;
         notification.bigContentView = remoteViews;
         notification.bigContentView.setTextViewText(R.id.notification_player_title, title);
-        notification.bigContentView.setTextViewText(R.id.notification_player_album, album);
+        notification.bigContentView.setTextViewText(R.id.notification_player_artist, artist);
         if(ImageUtils.getBitmapAlbumart(context, albumId) != null){
             notification.bigContentView.setImageViewBitmap(R.id.notification_player_album_art, ImageUtils.getBitmapAlbumart(context, albumId));
         }
