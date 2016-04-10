@@ -22,7 +22,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-
             android:layout_marginTop="10dp"
             android:singleLine="false"
             ghplayer:siBorderColor="@color/color_divider"
@@ -41,8 +40,9 @@
                 android:id="@+id/item_album_list_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="false"
                 android:textColor="@color/color_item_track_list_text"
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -50,6 +50,8 @@
                 android:id="@+id/item_album_list_artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 android:textColor="@color/color_item_track_list_text"
                 android:textSize="12sp" />
 
@@ -75,6 +77,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
     <View style="@style/Divider" />

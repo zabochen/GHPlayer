@@ -15,8 +15,29 @@
         <item name="android:windowBackground">@drawable/main_background</item>
         <!-- Navigation View Item  -->
         <item name="android:textColorSecondary">@color/color_toolbar_title</item>
-        <item name="alertDialogProTheme">@style/Theme.AlertDialogPro.Material.Light</item>
+        <item name="alertDialogProTheme">@style/AppTheme.AlertDialogProTheme</item>
     </style>
+
+    <!-- Alert Dialog Pro - Main Theme -->
+    <style name="AppTheme.AlertDialogProTheme" parent="Theme.AlertDialogPro.Material">
+        <item name="colorAccent">@color/color_alert_dialog_pro_accent</item>
+        <item name="android:windowTitleStyle">@style/AlertDialogProTitleStyle</item>
+        <item name="adpButtonBarNegativeButtonStyle">@style/AlertDialogProThemeButtonStyle</item>
+        <item name="adpButtonBarPositiveButtonStyle">@style/AlertDialogProThemeButtonStyle</item>
+    </style>
+
+    <!-- Alert Dialog Pro - Title -->
+    <style name="AlertDialogProTitleStyle" parent="DialogWindowTitle.AlertDialogPro.Material">
+        <item name="android:textColor">@color/color_alert_dialog_pro_title</item>
+    </style>
+
+    <!-- Alert Dialog Pro - Buttons -->
+    <style name="AlertDialogProThemeButtonStyle" parent="Widget.AlertDialogPro.Material.Button">
+        <item name="android:textColor">@color/color_alert_dialog_pro_button</item>
+    </style>
+
+    <!-- Notification -->
+    <style name="NotificationTextColor.Title" parent="TextAppearance.StatusBar.EventContent"/>
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
@@ -43,6 +64,5 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/color_activity_player_next_track</item>
     </style>
-
 
 </resources>

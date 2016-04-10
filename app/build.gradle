@@ -49,8 +49,9 @@ dependencies {
         transitive = true;
     }
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.siyamed:android-shape-imageview:0.9.3'
     compile 'io.realm:realm-android:0.85.1'
+    compile 'com.github.fengdai:alertdialogpro-core:0.2.6'
+    compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6'
 }

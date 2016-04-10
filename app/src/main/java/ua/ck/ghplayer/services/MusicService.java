@@ -142,23 +142,6 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-//        switch (trackListId) {
-//            case (Constants.MAIN_TRACK_LIST_ID):
-//                nextTrack(TrackList.getInstance().getTrackList());
-//                break;
-//            case (Constants.ALBUM_TRACK_LIST_ID):
-//                // ADD
-//                break;
-//            case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
-//                // ADD
-//                break;
-//            case (Constants.GENRE_TRACK_LIST_ID):
-//                nextTrack(GenreTrackList.getInstance().getSaveGenreTrackList());
-//                break;
-//            case (Constants.FAVORITE_TRACK_LIST_ID):
-//                // ADD
-//                break;
-//        }
         eventBus.post(new NotificationPlayerEvent(Constants.MUSIC_SERVICE_SENDER_ID, Constants.NOTIFICATION_PLAYER_BUTTON_NEXT));
     }
 
@@ -248,7 +231,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_EMPTY,
                                 TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
-                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getArtist(),
                                 TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -262,7 +245,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_EMPTY,
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
-                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getArtist(),
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -282,7 +265,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PLAY,
                                 TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
-                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getArtist(),
                                 TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -296,7 +279,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PLAY,
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
-                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getArtist(),
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -334,7 +317,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE,
                                 TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
-                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getArtist(),
                                 TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -348,7 +331,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE,
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
-                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getArtist(),
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -396,7 +379,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_NEXT,
                                 TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
-                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getArtist(),
                                 TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -411,7 +394,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_NEXT,
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
-                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getArtist(),
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -442,7 +425,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS,
                                 TrackList.getInstance().getTrackList().get(trackPosition).getTitle(),
-                                TrackList.getInstance().getTrackList().get(trackPosition).getAlbum(),
+                                TrackList.getInstance().getTrackList().get(trackPosition).getArtist(),
                                 TrackList.getInstance().getTrackList().get(trackPosition).getAlbumId()
                         );
                         break;
@@ -457,7 +440,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         notificationPlayer.startNotificationPlayer(
                                 Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS,
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getTitle(),
-                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum(),
+                                GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getArtist(),
                                 GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbumId()
                         );
                         break;

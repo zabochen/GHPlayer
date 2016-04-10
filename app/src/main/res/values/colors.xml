@@ -15,6 +15,14 @@
     <!-- Navigation View -->
     <color name="color_navigation_view_item_selected">#3d4041</color>
 
+    <!-- Alert Dialog Pro -->
+    <color name="color_alert_dialog_pro_title">#cccccc</color>
+    <color name="color_alert_dialog_pro_button">#cccccc</color>
+    <color name="color_alert_dialog_pro_accent">#cd1b28</color>
+
+    <!-- Notification -->
+    <color name="color_notification_track_album">#9d9d9e</color>
+
     <!-- Item Track List -->
     <color name="color_item_track_list_text">#aeaeb3</color>
 
