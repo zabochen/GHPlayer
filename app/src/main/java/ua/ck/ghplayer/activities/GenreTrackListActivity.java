@@ -34,6 +34,9 @@ import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
 import ua.ck.ghplayer.interfaces.ItemClickListener;
 import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
+import ua.ck.ghplayer.lists.AlbumTrackList;
+import ua.ck.ghplayer.lists.ArtistTrackList;
+import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreList;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
@@ -314,11 +317,17 @@ public class GenreTrackListActivity extends AppCompatActivity implements
                 break;
 
             case (Constants.ALBUM_TRACK_LIST_ID):
-                // ADD
+                stringBuilder.append(AlbumTrackList.getInstance().getSaveAlbumTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(AlbumTrackList.getInstance().getSaveAlbumTrackList().get(trackPosition).getTitle());
+                albumArtUri = AlbumTrackList.getInstance().getSaveAlbumTrackList().get(trackPosition).getAlbumArt();
                 break;
 
             case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
-                // ADD
+                stringBuilder.append(ArtistTrackList.getInstance().getSaveArtistTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(ArtistTrackList.getInstance().getSaveArtistTrackList().get(trackPosition).getTitle());
+                albumArtUri = ArtistTrackList.getInstance().getSaveArtistTrackList().get(trackPosition).getAlbumArt();
                 break;
 
             case (Constants.GENRE_TRACK_LIST_ID):
@@ -329,7 +338,10 @@ public class GenreTrackListActivity extends AppCompatActivity implements
                 break;
 
             case (Constants.FAVORITE_TRACK_LIST_ID):
-                // ADD
+                stringBuilder.append(FavoriteTrackList.getInstance().getSaveFavoriteTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(FavoriteTrackList.getInstance().getSaveFavoriteTrackList().get(trackPosition).getTitle());
+                albumArtUri = FavoriteTrackList.getInstance().getSaveFavoriteTrackList().get(trackPosition).getAlbumArt();
                 break;
         }
 

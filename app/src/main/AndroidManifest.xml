@@ -31,6 +31,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".activities.AlbumTrackListActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
 
         <activity
             android:name=".activities.PlayerActivity"

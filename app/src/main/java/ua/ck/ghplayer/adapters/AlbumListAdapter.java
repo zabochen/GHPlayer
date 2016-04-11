@@ -11,11 +11,15 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.activities.CustomTrackListActivity;
+import ua.ck.ghplayer.events.ShowTrackListActivity;
 import ua.ck.ghplayer.models.Album;
+import ua.ck.ghplayer.utils.Constants;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
     private Context context;
@@ -81,11 +85,14 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         public void onClick(View v) {
             int position = getLayoutPosition();
 
-            Intent intent = new Intent(context, CustomTrackListActivity.class);
+            EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
+
+/*            Intent intent = new Intent(context, CustomTrackListActivity.class);
             intent.putExtra("CHOICE_MODE", "ALBUM");
             intent.putExtra("ALBUM_NAME", data.get(position).getAlbum());
             intent.putExtra("ALBUM_ID", data.get(position).getId());
             context.startActivity(intent);
+*/
         }
     }
 }
