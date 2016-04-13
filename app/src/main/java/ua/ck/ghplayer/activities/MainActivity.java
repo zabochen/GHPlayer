@@ -37,9 +37,11 @@ import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
 import ua.ck.ghplayer.fragments.AlbumListFragment;
 import ua.ck.ghplayer.fragments.ArtistListFragment;
+import ua.ck.ghplayer.fragments.FavoriteTrackListFragment;
 import ua.ck.ghplayer.fragments.GenreListFragment;
 import ua.ck.ghplayer.fragments.PlaylistListFragment;
 import ua.ck.ghplayer.fragments.TrackListFragment;
+import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.services.MusicService;
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements
                 listFragment = new GenreListFragment();
                 break;
             case R.id.menu_navigation_view_item_favorites:
-                listFragment = new PlaylistListFragment();
+                listFragment = new FavoriteTrackListFragment();
                 break;
             default:
                 break;
@@ -277,10 +279,6 @@ public class MainActivity extends AppCompatActivity implements
             case (Constants.GENRE_TRACK_LIST_ID):
                 showGenreTrackListActivity(event);
                 break;
-
-            case (Constants.FAVORITE_TRACK_LIST_ID):
-                showFavoriteTrackListActivity(event);
-                break;
         }
     }
 
@@ -321,14 +319,6 @@ public class MainActivity extends AppCompatActivity implements
         }
         // requestCode = TrackList ID
         startActivityForResult(genreTrackListActivityIntent, event.getTrackListId());
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Show Favorite Track List Activity
-    // ---------------------------------------------------------------------------------------------
-
-    public void showFavoriteTrackListActivity(ShowTrackListActivity event) {
-        // ADD
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -391,7 +381,10 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
             case (Constants.FAVORITE_TRACK_LIST_ID):
-                // ADD
+                stringBuilder.append(FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist());
+                stringBuilder.append(" - ");
+                stringBuilder.append(FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle());
+                albumArtUri = FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumArt();
                 break;
         }
 

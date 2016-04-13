@@ -24,10 +24,12 @@ import ua.ck.ghplayer.events.PlayerUpdateEvent;
 import ua.ck.ghplayer.events.TouchProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
+import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.notification.NotificationPlayer;
 import ua.ck.ghplayer.utils.Constants;
+import ua.ck.ghplayer.utils.PlaylistUtils;
 import ua.ck.ghplayer.utils.ServiceUtils;
 
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener {
@@ -109,7 +111,9 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getId());
                 break;
             case (Constants.FAVORITE_TRACK_LIST_ID):
-                // ADD
+                long favoritePlaylistId = PlaylistUtils.getFavoritePlaylistId();
+                trackUri = ContentUris.withAppendedId(MediaStore.Audio.Playlists.Members.getContentUri("external", favoritePlaylistId),
+                        FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getId());
                 break;
         }
     }
@@ -250,7 +254,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         );
                         break;
                     case (Constants.FAVORITE_TRACK_LIST_ID):
-                        // ADD
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_EMPTY,
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumId()
+                        );
                         break;
                 }
                 break;
@@ -284,7 +293,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         );
                         break;
                     case (Constants.FAVORITE_TRACK_LIST_ID):
-                        // ADD
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PLAY,
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumId()
+                        );
                         break;
                 }
 
@@ -336,7 +350,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         );
                         break;
                     case (Constants.FAVORITE_TRACK_LIST_ID):
-                        // ADD
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PAUSE,
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumId()
+                        );
                         break;
                 }
 
@@ -399,7 +418,13 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         );
                         break;
                     case (Constants.FAVORITE_TRACK_LIST_ID):
-                        // ADD
+                        nextTrack(FavoriteTrackList.getInstance().getFavoriteTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_NEXT,
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumId()
+                        );
                         break;
                 }
 
@@ -445,7 +470,13 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                         );
                         break;
                     case (Constants.FAVORITE_TRACK_LIST_ID):
-                        // ADD
+                        previousTrack(FavoriteTrackList.getInstance().getFavoriteTrackList());
+                        notificationPlayer.startNotificationPlayer(
+                                Constants.NOTIFICATION_PLAYER_BUTTON_PREVIOUS,
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist(),
+                                FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumId()
+                        );
                         break;
                 }
 

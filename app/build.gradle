@@ -54,4 +54,5 @@ dependencies {
     compile 'io.realm:realm-android:0.85.1'
     compile 'com.github.fengdai:alertdialogpro-core:0.2.6'
     compile 'com.github.fengdai:alertdialogpro-theme-material:0.2.6'
+    compile 'com.daimajia.swipelayout:library:1.2.0'
 }

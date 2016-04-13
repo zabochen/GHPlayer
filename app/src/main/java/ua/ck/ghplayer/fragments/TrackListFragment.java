@@ -1,12 +1,9 @@
 package ua.ck.ghplayer.fragments;
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -14,30 +11,23 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.alertdialogpro.AlertDialogPro;
-
-import org.greenrobot.eventbus.EventBus;
+import com.daimajia.swipe.util.Attributes;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.TrackListAdapter;
-import ua.ck.ghplayer.events.StartMiniPlayerEvent;
-import ua.ck.ghplayer.interfaces.ItemClickListener;
-import ua.ck.ghplayer.listeners.RecyclerViewTouchHelper;
-import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.loaders.TrackListLoader;
 import ua.ck.ghplayer.utils.Constants;
 
-public class TrackListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemClickListener {
+public class TrackListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView trackListRecyclerView;
     private TrackListAdapter trackListAdapter;
@@ -48,9 +38,6 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
 
     // Dialog Choice Item
     int choiceItem = Constants.SORT_TRACK_LIST_TITLE;
-
-    // Instances
-    EventBus eventBus = EventBus.getDefault();
 
     public TrackListFragment() {
     }
@@ -79,18 +66,10 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
         trackListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         trackListRecyclerView.setHasFixedSize(true);
 
-        // RecyclerView - Add TouchListener
-        RecyclerViewTouchListener trackListTouchListener = new RecyclerViewTouchListener(getContext(), this, trackListRecyclerView);
-        trackListRecyclerView.addOnItemTouchListener(trackListTouchListener);
-
         // RecyclerView - Set Adapter
         trackListAdapter = new TrackListAdapter();
+        trackListAdapter.setMode(Attributes.Mode.Single);
         trackListRecyclerView.setAdapter(trackListAdapter);
-
-        // RecyclerView - Add Playlist
-        ItemTouchHelper.Callback trackListItemCallback = new RecyclerViewTouchHelper(trackListAdapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(trackListItemCallback);
-        itemTouchHelper.attachToRecyclerView(trackListRecyclerView);
     }
 
     @Override
@@ -219,24 +198,5 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-        // Sending the current track position in the MiniPlayer
-        eventBus.post(new StartMiniPlayerEvent(Constants.MAIN_TRACK_LIST_ID, position));
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-        // Get Track Full Path
-        Uri uri = Uri.parse("content://media/external/audio/media/" + String.valueOf(TrackList.getInstance().getTrackList().get(position).getId()));
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        String[] projection = {MediaStore.Audio.Media.DATA};
-        Cursor cursor = contentResolver.query(uri, projection, null, null, null);
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-        cursor.moveToFirst();
-        String filePath = cursor.getString(columnIndex);
-        Toast.makeText(getContext(), filePath, Toast.LENGTH_LONG).show();
     }
 }

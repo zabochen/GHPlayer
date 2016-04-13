@@ -26,6 +26,11 @@
     <!-- Item Track List -->
     <color name="color_item_track_list_text">#aeaeb3</color>
 
+    <!-- Swipe Layout -->
+    <color name="color_swipe_button_title">#cccccc</color>
+    <color name="color_swipe_button_positive_background">#393749</color>
+    <color name="color_swipe_button_negative_background">#2d2c35</color>
+
     <!-- Divider -->
     <color name="color_divider">#2d2c35</color>
 

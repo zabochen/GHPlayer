@@ -28,12 +28,11 @@ public class Application extends android.app.Application {
             sharedPreferencesEditor.apply();
         }
 
-        //Realm database
+        // Realm database
         realmConfiguration = new RealmConfiguration.Builder(getApplicationContext()).name("default.realm").build();
 
-        //Check for the existence of favorite playlist or create it
+        // Check for the existence of favorite playlist or create it
         PlaylistUtils.initFavoritePlaylist(getApplicationContext());
-
     }
 
 }

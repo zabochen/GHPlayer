@@ -2,7 +2,7 @@
 
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/item_track_list_swipe"
+    android:id="@+id/item_favorites_track_list_swipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     ghplayer:leftEdgeSwipeOffset="0dp"
@@ -11,7 +11,7 @@
     <!-- Bottom View - Right To Left Swipe -->
 
     <LinearLayout
-        android:id="@+id/item_track_list_bottom_view"
+        android:id="@+id/item_favorites_track_list_bottom_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -19,7 +19,7 @@
         <!-- Button Cancel -->
 
         <TextView
-            android:id="@+id/item_track_list_button_cancel"
+            android:id="@+id/item_favorites_track_list_button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,13 +32,13 @@
         <!-- Button Favorite -->
 
         <TextView
-            android:id="@+id/item_track_list_button_favorites"
+            android:id="@+id/item_favorites_track_list_button_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@color/color_swipe_button_positive_background"
             android:padding="20dp"
-            android:text="@string/item_track_list_swipe_button_favorites"
+            android:text="@string/item_favorites_track_list_swipe_button_delete"
             android:textColor="@color/color_swipe_button_title"
             android:textSize="14sp" />
 
@@ -47,7 +47,7 @@
     <!-- Top View - Item -->
 
     <LinearLayout
-        android:id="@+id/item_track_list_top_view"
+        android:id="@+id/item_favorites_track_list_top_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">

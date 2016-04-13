@@ -18,6 +18,11 @@
     <string name="menu_fragments_sorting_dialog_button_ascending">Ascending</string>
     <string name="menu_fragments_sorting_dialog_button_descending">Descending</string>
 
+    <!-- Swipe Layout Buttons -->
+    <string name="item_track_list_swipe_button_favorites">Favorites</string>
+    <string name="item_favorites_track_list_swipe_button_delete">Delete</string>
+    <string name="item_track_list_swipe_button_cancel">Cancel</string>
+
     <!-- Player -->
     <string name="activity_player_duration_track_time_title">Track Time:</string>
     <string name="activity_player_duration_track_elapsed_time_title">Elapsed Time:</string>

@@ -24,6 +24,7 @@ import ua.ck.ghplayer.events.PlayerUpdateEvent;
 import ua.ck.ghplayer.events.TouchProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
+import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.utils.Constants;
@@ -210,7 +211,10 @@ public class PlayerActivity extends AppCompatActivity
                 getTrackAlbum = GenreTrackList.getInstance().getSaveGenreTrackList().get(trackPosition).getAlbum();
                 break;
             case (Constants.FAVORITE_TRACK_LIST_ID):
-                // ADD
+                getAlbumArtUri = FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbumArt();
+                getTrackTitle = FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getTitle();
+                getTrackArtist = FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getArtist();
+                getTrackAlbum = FavoriteTrackList.getInstance().getFavoriteTrackList().get(trackPosition).getAlbum();
                 break;
         }
 
