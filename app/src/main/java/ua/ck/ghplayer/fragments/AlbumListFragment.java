@@ -12,19 +12,29 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.activities.ArtistInfoActivity;
+import ua.ck.ghplayer.activities.MainActivity;
 import ua.ck.ghplayer.adapters.AlbumListAdapter;
+import ua.ck.ghplayer.events.ShowTrackListActivity;
+import ua.ck.ghplayer.interfaces.ItemClickListener;
+import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.AlbumList;
 import ua.ck.ghplayer.lists.CustomAlbumList;
 import ua.ck.ghplayer.models.Album;
+import ua.ck.ghplayer.utils.Constants;
 
-public class AlbumListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AlbumListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemClickListener {
     private static final int ID_ALBUM_LIST_LOADER = 2;
     private RecyclerView albumListRecyclerView;
     private AlbumListAdapter albumListAdapter;
@@ -52,6 +62,9 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         albumListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         albumListRecyclerView.setHasFixedSize(true);
 
+        RecyclerViewTouchListener albumListTouchListener = new RecyclerViewTouchListener(getContext(), this, albumListRecyclerView);
+        albumListRecyclerView.addOnItemTouchListener(albumListTouchListener);
+
         albumListAdapter = new AlbumListAdapter();
         albumListRecyclerView.setAdapter(albumListAdapter);
 
@@ -65,7 +78,7 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Bundle bundle = getArguments();
+        Bundle bundle = getActivity().getIntent().getExtras();
 
         if (bundle != null && bundle.containsKey("ARTIST_ID")) {
             String[] selectionArgs = new String[]{String.valueOf(bundle.getLong("ARTIST_ID"))};
@@ -104,6 +117,21 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        if(getContext().getClass() == MainActivity.class) {
+            EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
+        }
+        if(getContext().getClass() == ArtistInfoActivity.class){
+            EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
+        }
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
 
     }
 }

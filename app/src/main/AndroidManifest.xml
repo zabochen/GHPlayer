@@ -59,7 +59,8 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CustomTrackListActivity"
+            android:name=".activities.ArtistTrackListActivity"
+            android:parentActivityName=".activities.ArtistInfoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Music Service -->

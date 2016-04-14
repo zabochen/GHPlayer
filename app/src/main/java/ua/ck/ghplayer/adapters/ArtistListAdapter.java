@@ -1,7 +1,9 @@
 package ua.ck.ghplayer.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,28 +13,25 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.activities.ArtistInfoActivity;
-import ua.ck.ghplayer.activities.CustomTrackListActivity;
-import ua.ck.ghplayer.events.ShowTrackListActivity;
 import ua.ck.ghplayer.models.Artist;
-import ua.ck.ghplayer.utils.Constants;
 
 public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder> {
     private Context context;
     private ArrayList<Artist> data;
+    private Activity parentActivity;
 
     public ArtistListAdapter() {
         super();
     }
 
-    public void setData(Context context, ArrayList<Artist> data) {
+    public void setData(Context context, ArrayList<Artist> data, Activity parentActivity) {
         this.context = context;
         this.data = data;
+        this.parentActivity = parentActivity;
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
         return data != null ? data.size() : 0;
     }
 
-    class ArtistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class ArtistViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView artist;
         public TextView numberOfAlbums;
@@ -75,33 +74,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
             this.artist = (TextView) itemView.findViewById(R.id.item_artist_list_artist);
             this.numberOfAlbums = (TextView) itemView.findViewById(R.id.item_artist_list_number_of_albums);
             this.numberOfTracks = (TextView) itemView.findViewById(R.id.item_artist_list_number_of_tracks);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-
-            Intent intent = new Intent(context, ArtistInfoActivity.class);
-            intent.putExtra("ARTIST_NAME", data.get(position).getArtist());
-            intent.putExtra("ARTIST_ID", data.get(position).getId());
-            context.startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            int position = getLayoutPosition();
-
-            EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
-/*
-            Intent intent = new Intent(context, CustomTrackListActivity.class);
-            intent.putExtra("CHOICE_MODE", "ARTIST");
-            intent.putExtra("ARTIST_NAME", data.get(position).getArtist());
-            intent.putExtra("ARTIST_ID", data.get(position).getId());
-            context.startActivity(intent);
-*/
-            return false;
-        }
     }
 }

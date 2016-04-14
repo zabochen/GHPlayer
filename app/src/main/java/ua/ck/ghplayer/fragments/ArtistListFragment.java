@@ -1,6 +1,7 @@
 package ua.ck.ghplayer.fragments;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,12 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.activities.ArtistInfoActivity;
 import ua.ck.ghplayer.adapters.ArtistListAdapter;
+import ua.ck.ghplayer.events.ShowTrackListActivity;
+import ua.ck.ghplayer.interfaces.ItemClickListener;
+import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.ArtistList;
 import ua.ck.ghplayer.models.Artist;
+import ua.ck.ghplayer.utils.Constants;
 
-public class ArtistListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ArtistListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemClickListener {
     private static final int ID_ARTIST_LIST_LOADER = 3;
     RecyclerView artistListRecyclerView;
     ArtistListAdapter artistListAdapter;
@@ -47,6 +55,9 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
         artistListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         artistListRecyclerView.setHasFixedSize(true);
 
+        RecyclerViewTouchListener artistListTouchListener = new RecyclerViewTouchListener(getContext(), this, artistListRecyclerView);
+        artistListRecyclerView.addOnItemTouchListener(artistListTouchListener);
+
         artistListAdapter = new ArtistListAdapter();
         artistListRecyclerView.setAdapter(artistListAdapter);
     }
@@ -67,7 +78,7 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
         if (data != null && data.moveToFirst()) {
             ArtistList artistList = ArtistList.getInstance();
             artistList.setArtistList(getActivity(), data);
-            artistListAdapter.setData(getContext(), artistList.getArtistList());
+            artistListAdapter.setData(getContext(), artistList.getArtistList(),getActivity());
 
             artistListAdapter.notifyDataSetChanged();
         }
@@ -75,6 +86,16 @@ public class ArtistListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoaderReset(Loader loader) {
+
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        EventBus.getDefault().post(new ShowTrackListActivity(Constants.ARTIST_ALBUM_TRACK_LIST_ID, position));
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
 
     }
 }

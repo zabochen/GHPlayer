@@ -1,7 +1,6 @@
 package ua.ck.ghplayer.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
-import ua.ck.ghplayer.activities.CustomTrackListActivity;
-import ua.ck.ghplayer.events.ShowTrackListActivity;
 import ua.ck.ghplayer.models.Album;
-import ua.ck.ghplayer.utils.Constants;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
     private Context context;
@@ -65,7 +59,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         return data != null ? data.size() : 0;
     }
 
-    class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView title;
         public TextView artist;
@@ -78,21 +72,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
             this.title = (TextView) itemView.findViewById(R.id.item_album_list_album);
             this.artist = (TextView) itemView.findViewById(R.id.item_album_list_artist);
             this.numberOfSongs = (TextView) itemView.findViewById(R.id.item_album_list_number_of_songs);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-
-            EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
-
-/*            Intent intent = new Intent(context, CustomTrackListActivity.class);
-            intent.putExtra("CHOICE_MODE", "ALBUM");
-            intent.putExtra("ALBUM_NAME", data.get(position).getAlbum());
-            intent.putExtra("ALBUM_ID", data.get(position).getId());
-            context.startActivity(intent);
-*/
-        }
     }
 }

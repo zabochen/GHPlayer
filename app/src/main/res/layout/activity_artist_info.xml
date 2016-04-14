@@ -1,69 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:ghplayer="http://schemas.android.com/tools"
-    android:id="@+id/activity_artist_info__view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:background="@drawable/navigation_view_background"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    app:itemBackground="@drawable/selector_navigation_view_item"
-    app:itemIconTint="@color/color_toolbar_title"
-    app:itemTextColor="@color/color_toolbar_title">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/activity_artist_info__toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_background" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <ScrollView
-        android:id="@+id/activity_artist_info__info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_artist_info__toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/toolbar_background"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <LinearLayout
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            android:background="@drawable/toolbar_background" />
+    </android.support.design.widget.AppBarLayout>
 
-            <com.github.siyamed.shapeimageview.CircularImageView
-                android:id="@+id/activity_artist_info__cover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                ghplayer:siBorderColor="@color/color_divider"
-                ghplayer:siBorderWidth="3dp" />
-
-            <TextView
-                android:id="@+id/activity_artist_info__content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textColor="@color/color_item_track_list_text"
-                android:textSize="14sp" />
-
-            <View style="@style/Divider" />
-
-            <Button
-                android:id="@+id/activity_artist_info__read_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Show more" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/activity_artist_info__albums"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
-
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+</android.support.design.widget.CoordinatorLayout>
