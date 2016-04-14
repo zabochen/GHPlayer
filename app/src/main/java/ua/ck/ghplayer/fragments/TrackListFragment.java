@@ -70,6 +70,15 @@ public class TrackListFragment extends Fragment implements LoaderManager.LoaderC
         trackListAdapter = new TrackListAdapter();
         trackListAdapter.setMode(Attributes.Mode.Single);
         trackListRecyclerView.setAdapter(trackListAdapter);
+
+        // RecyclerView - Set Scroll Listener
+        trackListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                trackListAdapter.mItemManger.closeAllItems();
+            }
+        });
     }
 
     @Override

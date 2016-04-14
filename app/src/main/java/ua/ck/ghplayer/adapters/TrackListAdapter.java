@@ -72,7 +72,7 @@ public class TrackListAdapter extends RecyclerSwipeAdapter<TrackListAdapter.MyVi
             }
         });
 
-        // Button Favorites Click
+        // Button Favorite Click
         holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +81,7 @@ public class TrackListAdapter extends RecyclerSwipeAdapter<TrackListAdapter.MyVi
             }
         });
 
-        // Swipe Item Manager
+        // Swipe Item Manger
         mItemManger.bindView(holder.itemView, position);
     }
 
@@ -112,7 +112,7 @@ public class TrackListAdapter extends RecyclerSwipeAdapter<TrackListAdapter.MyVi
             this.album = (TextView) itemView.findViewById(R.id.item_track_list_album);
             this.albumArt = (ImageView) itemView.findViewById(R.id.item_track_list_album_art);
             this.swipeLayout = (SwipeLayout) itemView.findViewById(R.id.item_track_list_swipe);
-            this.buttonFavorite = (TextView) itemView.findViewById(R.id.item_track_list_button_favorites);
+            this.buttonFavorite = (TextView) itemView.findViewById(R.id.item_track_list_button_favorite);
             this.buttonCancel = (TextView) itemView.findViewById(R.id.item_track_list_button_cancel);
         }
     }

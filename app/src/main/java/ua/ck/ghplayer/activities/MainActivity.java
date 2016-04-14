@@ -39,7 +39,6 @@ import ua.ck.ghplayer.fragments.AlbumListFragment;
 import ua.ck.ghplayer.fragments.ArtistListFragment;
 import ua.ck.ghplayer.fragments.FavoriteTrackListFragment;
 import ua.ck.ghplayer.fragments.GenreListFragment;
-import ua.ck.ghplayer.fragments.PlaylistListFragment;
 import ua.ck.ghplayer.fragments.TrackListFragment;
 import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreTrackList;
