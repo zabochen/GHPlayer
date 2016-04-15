@@ -3,6 +3,7 @@ package ua.ck.ghplayer;
 import android.content.SharedPreferences;
 
 import io.realm.RealmConfiguration;
+import ua.ck.ghplayer.utils.ArtistInfoUtils;
 import ua.ck.ghplayer.utils.Constants;
 import ua.ck.ghplayer.utils.PlaylistUtils;
 
@@ -33,6 +34,9 @@ public class Application extends android.app.Application {
 
         // Check for the existence of favorite playlist or create it
         PlaylistUtils.initFavoritePlaylist(getApplicationContext());
+
+        //Get all Artist's info
+        //ArtistInfoUtils.setAllArtistInfo(this);
     }
 
 }

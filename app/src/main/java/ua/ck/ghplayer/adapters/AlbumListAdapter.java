@@ -1,7 +1,6 @@
 package ua.ck.ghplayer.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
-import ua.ck.ghplayer.activities.CustomTrackListActivity;
-import ua.ck.ghplayer.activities.MainActivity;
-import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.models.Album;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder> {
@@ -45,7 +41,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         Album album = data.get(position);
         Picasso.with(context)
                 .load(album.getAlbumCoverUri())
-                .placeholder(R.drawable.bg_default_album_art)
+                .placeholder(R.drawable.album_cover_default)
                 .into(holder.cover);
         String firstYear = album.getFirstYear() > 0 ? String.valueOf(album.getFirstYear()) : "";
         String title = new StringBuffer()
@@ -63,7 +59,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         return data != null ? data.size() : 0;
     }
 
-    class AlbumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView title;
         public TextView artist;
@@ -76,26 +72,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
             this.title = (TextView) itemView.findViewById(R.id.item_album_list_album);
             this.artist = (TextView) itemView.findViewById(R.id.item_album_list_artist);
             this.numberOfSongs = (TextView) itemView.findViewById(R.id.item_album_list_number_of_songs);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-            Album album = data.get(position);
-            /*// Delete
-            try{
-
-                ItemClickFragmentSetter itemClick =  (ItemClickFragmentSetter) context;
-                itemClick.onAlbumListItemClick(album.getAlbum(), (int)album.getId());
-            } catch (ClassCastException e) {
-            }*/
-
-            /*Intent intent = new Intent(context, CustomTrackListActivity.class);
-            intent.putExtra("ALBUM_NAME", album.getAlbum());
-            intent.putExtra("ALBUM_ID", album.getId());
-            context.startActivity(intent);
-            */
-        }
     }
 }

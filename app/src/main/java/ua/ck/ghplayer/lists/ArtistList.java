@@ -27,14 +27,16 @@ public class ArtistList {
 
     public void setArtistList(Context context, Cursor cursor) {
         clearArtistList();
+        ArtistInfo artistInfo;
+        String artistArtUrl = null;
 
         if (cursor != null && cursor.moveToFirst()) {
             cursor.moveToFirst();
             do {
-                ArtistInfo artistInfo = ArtistInfoUtils.getArtistInfo(context,
+                artistInfo = ArtistInfoUtils.getArtistInfo(context,
                         cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST)));
 
-                String artistArtUrl = null;
+                artistArtUrl = null;
                 if (artistInfo != null) {
                     artistArtUrl = artistInfo.getArtistArtUrl();
                 }

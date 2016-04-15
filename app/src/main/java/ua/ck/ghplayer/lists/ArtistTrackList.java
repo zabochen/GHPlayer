@@ -9,24 +9,25 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.models.Track;
 import ua.ck.ghplayer.utils.ImageUtils;
 
-public class FavoriteTrackList {
+public class ArtistTrackList {
 
-    private static FavoriteTrackList instance;
-    private static ArrayList<Track> favoriteTrackList;
+    private static ArtistTrackList instance;
+    private static ArrayList<Track> artistTrackList;
+    private static ArrayList<Track> saveArtistTrackList;
 
-    private FavoriteTrackList() {
+    private ArtistTrackList() {
     }
 
-    public static FavoriteTrackList getInstance() {
+    public static ArtistTrackList getInstance() {
         if (instance == null) {
-            instance = new FavoriteTrackList();
+            instance = new ArtistTrackList();
         }
         return instance;
     }
 
-    public void setFavoriteTrackList(Context context, Cursor cursor) {
+    public void setArtistTrackList(Context context, Cursor cursor) {
         cursor.moveToFirst();
-        favoriteTrackList = new ArrayList<>();
+        artistTrackList = new ArrayList<>();
         do {
             // Get The Value Of Fields
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(Track.ID));
@@ -39,11 +40,21 @@ public class FavoriteTrackList {
 
             // Add Object To ArrayList
             Track track = new Track(id, title, artist, album, albumId, albumArt, duration);
-            favoriteTrackList.add(track);
+            artistTrackList.add(track);
         } while (cursor.moveToNext());
     }
 
-    public ArrayList<Track> getFavoriteTrackList() {
-        return favoriteTrackList != null ? favoriteTrackList : null;
+    public ArrayList<Track> getArtistTrackList() {
+        return artistTrackList != null ? artistTrackList : null;
     }
+
+    public void saveArtistTrackList() {
+        saveArtistTrackList = new ArrayList<>();
+        saveArtistTrackList.addAll(artistTrackList);
+    }
+
+    public ArrayList<Track> getSaveArtistTrackList() {
+        return saveArtistTrackList != null ? saveArtistTrackList : null;
+    }
+
 }

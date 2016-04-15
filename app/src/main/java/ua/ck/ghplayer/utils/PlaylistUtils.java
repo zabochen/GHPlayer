@@ -6,8 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
+
+import ua.ck.ghplayer.loaders.CustomTrackListLoader;
+import ua.ck.ghplayer.loaders.FavoriteTrackListLoader;
 
 public class PlaylistUtils {
 
@@ -101,6 +103,47 @@ public class PlaylistUtils {
         ContentResolver contentResolver = context.getContentResolver();
         contentResolver.delete(uri, trackSelection, trackSelectionArgs);
         Toast.makeText(context, "Removed From Favorites", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void AddAlbumTracksToFavorite(Context context, long albumId) {
+        //Get all tracks from album
+        Cursor albumTracksCursor = new CustomTrackListLoader(context, "ALBUM", albumId, null).loadInBackground();
+        Cursor favoriteTracksCursor = new FavoriteTrackListLoader(context).loadInBackground();
+        int trackPosition = favoriteTracksCursor.getCount();
+
+        if (albumTracksCursor != null && albumTracksCursor.moveToFirst()) {
+            albumTracksCursor.moveToFirst();
+
+            long trackId = albumTracksCursor.getLong(albumTracksCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+
+            do {
+                if (!isTrackInFavorite(context, trackId)) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, trackId);
+                    contentValues.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, ++trackPosition);
+                    context.getContentResolver().insert(getFavoritePlaylistUri(), contentValues);
+                }
+
+            } while (albumTracksCursor.moveToNext());
+
+            albumTracksCursor.close();
+            Toast.makeText(context, "Album added to favorites", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public static boolean isTrackInFavorite(Context context, long trackId) {
+        String[] trackProjection = new String[]{MediaStore.Audio.Playlists.Members.AUDIO_ID};
+        String trackSelection = MediaStore.Audio.Playlists.Members.AUDIO_ID + " = ?";
+        String[] trackSelectionArgs = {String.valueOf(trackId)};
+
+        Cursor trackCursor = context.getContentResolver().query(getFavoritePlaylistUri(), trackProjection, trackSelection, trackSelectionArgs, null);
+        if (trackCursor != null && trackCursor.moveToFirst()) {
+            trackCursor.close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

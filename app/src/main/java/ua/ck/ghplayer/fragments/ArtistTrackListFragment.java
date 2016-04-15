@@ -1,24 +1,24 @@
-package ua.ck.ghplayer.activities;
+package ua.ck.ghplayer.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,39 +29,40 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import ua.ck.ghplayer.R;
+import ua.ck.ghplayer.activities.PlayerActivity;
+import ua.ck.ghplayer.adapters.ArtistTrackListAdapter;
 import ua.ck.ghplayer.events.MiniPlayerButtonEvent;
 import ua.ck.ghplayer.events.NotificationPlayerEvent;
-import ua.ck.ghplayer.events.ShowTrackListActivity;
-import ua.ck.ghplayer.events.StartMiniPlayerEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
-import ua.ck.ghplayer.fragments.AlbumListFragment;
-import ua.ck.ghplayer.fragments.ArtistListFragment;
-import ua.ck.ghplayer.fragments.FavoriteTrackListFragment;
-import ua.ck.ghplayer.fragments.GenreListFragment;
-import ua.ck.ghplayer.fragments.TrackListFragment;
+import ua.ck.ghplayer.interfaces.ItemClickListener;
+import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.AlbumTrackList;
 import ua.ck.ghplayer.lists.ArtistList;
 import ua.ck.ghplayer.lists.ArtistTrackList;
 import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.GenreTrackList;
 import ua.ck.ghplayer.lists.TrackList;
+import ua.ck.ghplayer.loaders.ArtistTrackListLoader;
 import ua.ck.ghplayer.services.MusicService;
 import ua.ck.ghplayer.utils.Constants;
 
-public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class ArtistTrackListFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor>,
+        ItemClickListener,
+        View.OnClickListener {
 
-    // View's
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
+    private View view;
+    private RecyclerView artistTrackListRecyclerView;
+    private ArtistTrackListAdapter artistTrackListAdapter;
+
+    // Artist ID
+    private int artistPosition;
+    private long artistId;
 
     // Main Configuration
     private int trackListId;
     private int trackPosition;
-
-    // NavigationView
-    private static int navigationViewItemSelected;
 
     // MiniPlayer
     private boolean miniPlayerGone;
@@ -80,33 +81,51 @@ public class MainActivity extends AppCompatActivity implements
     private long trackCurrentDuration;
     private long trackTotalDuration;
 
-    // EventBus Instance
+    // Event Bus Instance
     private EventBus eventBus = EventBus.getDefault();
 
-    // ---------------------------------------------------------------------------------------------
-    // EventBus Register
-    // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         eventBus.register(this);
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Main Set's
-    // ---------------------------------------------------------------------------------------------
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(Constants.ARTIST_ALBUM_TRACK_LIST_LOADER_ID, null, this);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_artist_track_list, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.view = view;
+        getIntentExtra();
         setView();
-        setInstanceState(savedInstanceState);
-        setToolbar();
-        setNavigationView();
-        setMiniPlayerGone(miniPlayerGone);
-        setFragment();
+
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Get Data From Activity
+    // ---------------------------------------------------------------------------------------------
+
+    private void getIntentExtra() {
+        this.artistPosition = getActivity().getIntent().getExtras().getInt(Constants.ACTIVITY_RESULT_ITEM_POSITION_INTENT_KEY);
+        this.artistId = ArtistList.getInstance().getArtistList().get(artistPosition).getId();
+        this.miniPlayerGone = getActivity().getIntent().getExtras().getBoolean(Constants.MINI_PLAYER_GONE_KEY);
+        if (!miniPlayerGone) {
+            this.trackListId = getActivity().getIntent().getExtras().getInt(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY);
+            this.trackPosition = getActivity().getIntent().getExtras().getInt(Constants.MINI_PLAYER_TRACK_POSITION_KEY);
+            this.buttonPauseVisible = getActivity().getIntent().getExtras().getBoolean(Constants.BUTTON_PAUSE_VISIBLE_STATUS);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -114,14 +133,15 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------------------------------------------------------------------------------------
 
     private void setView() {
-        // Find View
-        imageViewAlbumArt = (ImageView) findViewById(R.id.activity_mini_player_album_art);
-        title = (TextView) findViewById(R.id.activity_mini_player_title);
-        buttonPrevious = (Button) findViewById(R.id.activity_mini_player_button_previous);
-        buttonPlay = (Button) findViewById(R.id.activity_mini_player_button_play);
-        buttonPause = (Button) findViewById(R.id.activity_mini_player_button_pause);
-        buttonStop = (Button) findViewById(R.id.activity_mini_player_button_stop);
-        buttonNext = (Button) findViewById(R.id.activity_mini_player_button_next);
+        // MiniPlayer
+        setMiniPlayerGone(miniPlayerGone);
+        imageViewAlbumArt = (ImageView) view.findViewById(R.id.activity_mini_player_album_art);
+        title = (TextView) view.findViewById(R.id.activity_mini_player_title);
+        buttonPrevious = (Button) view.findViewById(R.id.activity_mini_player_button_previous);
+        buttonPlay = (Button) view.findViewById(R.id.activity_mini_player_button_play);
+        buttonPause = (Button) view.findViewById(R.id.activity_mini_player_button_pause);
+        buttonStop = (Button) view.findViewById(R.id.activity_mini_player_button_stop);
+        buttonNext = (Button) view.findViewById(R.id.activity_mini_player_button_next);
 
         // Set Listener
         imageViewAlbumArt.setOnClickListener(this);
@@ -130,14 +150,39 @@ public class MainActivity extends AppCompatActivity implements
         buttonPause.setOnClickListener(this);
         buttonStop.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
+
+        // MiniPlayer Update Content & Replace Buttons
+        if (!miniPlayerGone) {
+            setMiniPlayerTrackContent(trackListId, trackPosition);
+            if (buttonPauseVisible) {
+                buttonPlay.setVisibility(View.GONE);
+                buttonPause.setVisibility(View.VISIBLE);
+            }
+        }
+
+        // RecyclerView - Base Configuration
+        artistTrackListRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_artist_track_list__recycler_view);
+        artistTrackListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        artistTrackListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        artistTrackListRecyclerView.setHasFixedSize(true);
+
+        // RecyclerView - Add TouchListener
+        RecyclerViewTouchListener artistTrackListListener = new RecyclerViewTouchListener(
+                getActivity(), this, artistTrackListRecyclerView);
+        artistTrackListRecyclerView.addOnItemTouchListener(artistTrackListListener);
+
+        // RecyclerView - Set Adapter
+        artistTrackListAdapter = new ArtistTrackListAdapter();
+        artistTrackListRecyclerView.setAdapter(artistTrackListAdapter);
     }
+
 
     // ---------------------------------------------------------------------------------------------
     // Save & Set Activity State
     // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Main Data
         outState.putInt(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY, trackListId);
@@ -152,9 +197,6 @@ public class MainActivity extends AppCompatActivity implements
         if (bundle == null) {
             // Mini Player Gone
             miniPlayerGone = true;
-
-            // Navigation View
-            navigationViewItemSelected = R.id.menu_navigation_view_item_tracks;
         } else {
             // Set Main Data
             trackListId = bundle.getInt(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY);
@@ -178,210 +220,60 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+
     // ---------------------------------------------------------------------------------------------
-    // Set Toolbar & Fragment
+    // Loader ArtistTrackList
     // ---------------------------------------------------------------------------------------------
 
-    private void setToolbar() {
-        // Toolbar
-        this.toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
-        setSupportActionBar(toolbar);
-
-        // Actionbar
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.app_name);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //  Before load new ArtistTrackList, clear old ArtistTrackList
+        if (ArtistTrackList.getInstance().getArtistTrackList() != null) {
+            ArtistTrackList.getInstance().getArtistTrackList().clear();
         }
-    }
-
-    private void setFragment() {
-        FrameLayout activityFrameLayout = (FrameLayout) findViewById(R.id.activity_main_frame_layout);
-        Fragment listFragment = null;
-
-        switch (navigationViewItemSelected) {
-            case R.id.menu_navigation_view_item_tracks:
-                listFragment = new TrackListFragment();
-                break;
-            case R.id.menu_navigation_view_item_albums:
-                listFragment = new AlbumListFragment();
-                break;
-            case R.id.menu_navigation_view_item_artists:
-                listFragment = new ArtistListFragment();
-                break;
-            case R.id.menu_navigation_view_item_genres:
-                listFragment = new GenreListFragment();
-                break;
-            case R.id.menu_navigation_view_item_favorites:
-                listFragment = new FavoriteTrackListFragment();
-                break;
-            default:
-                break;
-        }
-
-        // Replace Fragment's
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(activityFrameLayout.getId(), listFragment)
-                .commit();
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // NavigationView: Set & Listener
-    // ---------------------------------------------------------------------------------------------
-
-    private void setNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.toggle_navigation_view_open, R.string.toggle_navigation_view_close);
-        drawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
-        //navigationView.inflateHeaderView(R.layout.navigation_view_header);
-        navigationView.inflateMenu(R.menu.menu_navigation_view);
-        //navigationView.getMenu().findItem(navigationViewItemSelected).setChecked(true);
-        navigationView.setNavigationItemSelectedListener(this);
+        return new ArtistTrackListLoader(getActivity(), artistId);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        item.setChecked(true);
-        navigationViewItemSelected = item.getItemId();
-        setFragment();
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Set ArtistTrackList
+        if (data != null && data.moveToFirst()) {
+            ArtistTrackList.getInstance().setArtistTrackList(getActivity(), data);
+            artistTrackListRecyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void onBackPressed() {
-        // Close Navigation View
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+    public void onLoaderReset(Loader<Cursor> loader) {
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Show Track List Activity Base
+    // Click Listener
     // ---------------------------------------------------------------------------------------------
 
-    @Subscribe
-    public void onShowTrackListActivity(ShowTrackListActivity event) {
+    @Override
+    public void onClick(View view, int position) {
 
-        switch (event.getTrackListId()) {
-            case (Constants.ALBUM_TRACK_LIST_ID):
-                showAlbumTrackListActivity(event);
-                break;
+        // Save Current Artist TrackList & Track Position
+        ArtistTrackList.getInstance().saveArtistTrackList();
+        this.trackListId = Constants.ARTIST_ALBUM_TRACK_LIST_ID;
+        this.trackPosition = position;
 
-            case (Constants.ARTIST_ALBUM_TRACK_LIST_ID):
-                showArtistAlbumTrackListActivity(event);
-                break;
-
-            case (Constants.GENRE_TRACK_LIST_ID):
-                showGenreTrackListActivity(event);
-                break;
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Show Album Track List Activity
-    // ---------------------------------------------------------------------------------------------
-
-    public void showAlbumTrackListActivity(ShowTrackListActivity event) {
-        Intent albumTrackListActivityIntent = new Intent(getApplicationContext(), AlbumTrackListActivity.class);
-        // MiniPlayer current state (Gone/Visible)
-        albumTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_GONE_KEY, miniPlayerGone);
-        // Selected Album Position
-        albumTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_ITEM_POSITION_INTENT_KEY, event.getPosition());
-        // If MiniPlayer Visible
-        if (!miniPlayerGone) {
-            // Current TrackList ID
-            albumTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY, trackListId);
-            // Current Track position
-            albumTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
-            // Button Pause Status
-            albumTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_STATUS_BUTTON_PAUSE_INTENT_KEY, buttonPauseVisible);
-        }
-        // requestCode = TrackList ID
-        startActivityForResult(albumTrackListActivityIntent, event.getTrackListId());
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Show Artist Info Activity
-    // ---------------------------------------------------------------------------------------------
-
-    public void showArtistAlbumTrackListActivity(ShowTrackListActivity event) {
-        Intent artistTrackListActivityIntent = new Intent(getApplicationContext(), ArtistInfoActivity.class);
-        // MiniPlayer current state (Gone/Visible)
-        artistTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_GONE_KEY, miniPlayerGone);
-        // Selected Artist Position
-        artistTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_ITEM_POSITION_INTENT_KEY, event.getPosition());
-        // If MiniPlayer Visible
-
-        artistTrackListActivityIntent.putExtra("ARTIST_NAME", ArtistList.getInstance().getArtistList().get(event.getPosition()).getArtist());
-        artistTrackListActivityIntent.putExtra("ARTIST_ID", ArtistList.getInstance().getArtistList().get(event.getPosition()).getId());
-        if (!miniPlayerGone) {
-            // Current TrackList ID
-            artistTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY, trackListId);
-            // Current Track position
-            artistTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
-            // Button Pause Status
-            artistTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_STATUS_BUTTON_PAUSE_INTENT_KEY, buttonPauseVisible);
-        }
-        // requestCode = TrackList ID
-        startActivity(artistTrackListActivityIntent);
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Show Genre Track List Activity
-    // ---------------------------------------------------------------------------------------------
-
-    public void showGenreTrackListActivity(ShowTrackListActivity event) {
-        Intent genreTrackListActivityIntent = new Intent(getApplicationContext(), GenreTrackListActivity.class);
-        // MiniPlayer current state (Gone/Visible)
-        genreTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_GONE_KEY, miniPlayerGone);
-        // Selected Genre Position
-        genreTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_ITEM_POSITION_INTENT_KEY, event.getPosition());
-        // If MiniPlayer Visible
-        if (!miniPlayerGone) {
-            // Current TrackList ID
-            genreTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_LIST_ID_KEY, trackListId);
-            // Current Track position
-            genreTrackListActivityIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
-            // Button Pause Status
-            genreTrackListActivityIntent.putExtra(Constants.ACTIVITY_RESULT_STATUS_BUTTON_PAUSE_INTENT_KEY, buttonPauseVisible);
-        }
-        // requestCode = TrackList ID
-        startActivityForResult(genreTrackListActivityIntent, event.getTrackListId());
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // MiniPlayer Start Event
-    // ---------------------------------------------------------------------------------------------
-
-    @Subscribe
-    public void onStartMiniPlayerEvent(StartMiniPlayerEvent event) {
-
-        this.trackListId = event.getTrackListId();
-        this.trackPosition = event.getPosition();
-
-        // Update Button Pause
-        setMiniPlayerButtonPauseActive();
-
-        // Visible MiniPlayer
+        // Visible MiniPlayer & Set Content & Set Button Pause
         if (miniPlayer.getVisibility() == View.GONE) {
             setMiniPlayerGone(false);
         }
+        setMiniPlayerTrackContent(Constants.ARTIST_ALBUM_TRACK_LIST_ID, trackPosition);
+        setMiniPlayerButtonPauseActive();
 
         // Start MusicService
-        Intent musicServiceStartIntent = new Intent(getApplicationContext(), MusicService.class);
-        musicServiceStartIntent.putExtra(Constants.TRACK_LIST_ID_KEY, trackListId);
-        musicServiceStartIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, trackPosition);
-        startService(musicServiceStartIntent);
+        Intent musicServiceStartIntent = new Intent(getActivity(), MusicService.class);
+        musicServiceStartIntent.putExtra(Constants.TRACK_LIST_ID_KEY, Constants.ARTIST_ALBUM_TRACK_LIST_ID);
+        musicServiceStartIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, position);
+        getActivity().startService(musicServiceStartIntent);
 
-        // Set MiniPlayer track content
-        setMiniPlayerTrackContent(trackListId, trackPosition);
+        // Set Activity Result
+        setActivityResultIntent();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -435,11 +327,11 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set AlbumArt
         if (albumArtUri != null) {
-            Picasso.with(getApplicationContext())
+            Picasso.with(getActivity())
                     .load(albumArtUri)
                     .into(imageViewAlbumArt);
         } else {
-            Picasso.with(getApplicationContext())
+            Picasso.with(getActivity())
                     .load(R.drawable.album_cover_default)
                     .into(imageViewAlbumArt);
         }
@@ -456,6 +348,8 @@ public class MainActivity extends AppCompatActivity implements
         this.trackPosition = event.getTrackPosition();
         // Update MiniPlayer
         setMiniPlayerTrackContent(event.getTrackListId(), event.getTrackPosition());
+        // Set Activity Result
+        setActivityResultIntent();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -463,14 +357,14 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------------------------------------------------------------------------------------
 
     private void setMiniPlayerGone(boolean miniPlayerGone) {
-        miniPlayer = (RelativeLayout) findViewById(R.id.activity_mini_player_container);
+        miniPlayer = (RelativeLayout) view.findViewById(R.id.activity_mini_player_container);
         if (miniPlayerGone) {
-            Animation bottomUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_down);
+            Animation bottomUp = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_down);
             miniPlayer.startAnimation(bottomUp);
             miniPlayer.setVisibility(View.GONE);
             this.miniPlayerGone = true;
         } else {
-            Animation bottomUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_up);
+            Animation bottomUp = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_up);
             miniPlayer.startAnimation(bottomUp);
             miniPlayer.setVisibility(View.VISIBLE);
             this.miniPlayerGone = false;
@@ -482,8 +376,10 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------------------------------------------------------------------------------------
 
     void setMiniPlayerButtonPauseActive() {
-        // Set active Mini Player button Pause
         buttonPauseVisible = true;
+        setActivityResultIntent();
+
+        // Set active Mini Player button Pause
         buttonPause.setVisibility(View.VISIBLE);
         buttonPlay.setVisibility(View.GONE);
 
@@ -537,8 +433,9 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------------------------------------------------------------------------------------
 
     private void onClickMiniPlayerButtonPlay() {
-        // Replace Buttons
         buttonPauseVisible = true;
+        setActivityResultIntent();
+        // Replace Buttons
         buttonPlay.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
         // Update Notification Player
@@ -561,8 +458,9 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------------------------------------------------------------------------------------
 
     private void onClickMiniPlayerButtonPause() {
-        // Replace Buttons
         buttonPauseVisible = false;
+        setActivityResultIntent();
+        // Replace Buttons
         buttonPause.setVisibility(View.GONE);
         buttonPlay.setVisibility(View.VISIBLE);
         // Update Notification Player
@@ -598,12 +496,16 @@ public class MainActivity extends AppCompatActivity implements
 
             case (Constants.MINI_PLAYER_BUTTON_PLAY):
                 buttonPauseVisible = true;
+                setActivityResultIntent();
+                // Replace Buttons
                 buttonPause.setVisibility(View.VISIBLE);
                 buttonPlay.setVisibility(View.GONE);
                 break;
 
             case (Constants.MINI_PLAYER_BUTTON_PAUSE):
                 buttonPauseVisible = false;
+                setActivityResultIntent();
+                // Replace Buttons
                 buttonPause.setVisibility(View.GONE);
                 buttonPlay.setVisibility(View.VISIBLE);
                 break;
@@ -632,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onStartPlayer(int trackListId, int trackPosition) {
 
-        Intent startPlayerIntent = new Intent(getApplicationContext(), PlayerActivity.class);
+        Intent startPlayerIntent = new Intent(getActivity(), PlayerActivity.class);
 
         // MiniPlayer current state (Gone/Visible)
         startPlayerIntent.putExtra(Constants.MINI_PLAYER_GONE_KEY, miniPlayerGone);
@@ -671,11 +573,24 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     // ---------------------------------------------------------------------------------------------
+    // Set Player Activity Result
+    // ---------------------------------------------------------------------------------------------
+
+    public void setActivityResultIntent() {
+        Intent sendIntent = new Intent();
+        sendIntent.putExtra(Constants.MINI_PLAYER_GONE_KEY, false);
+        sendIntent.putExtra(Constants.ACTIVITY_RESULT_TRACK_LIST_ID_INTENT_KEY, trackListId);
+        sendIntent.putExtra(Constants.ACTIVITY_RESULT_TRACK_POSITION_INTENT_KEY, trackPosition);
+        sendIntent.putExtra(Constants.ACTIVITY_RESULT_STATUS_BUTTON_PAUSE_INTENT_KEY, buttonPauseVisible);
+        getActivity().setResult(Activity.RESULT_OK, sendIntent);
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // Activity Result - Get Data With Player Activity
     // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null) {
@@ -698,12 +613,17 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onLongClick(View view, int position) {
+
+    }
+
     // ---------------------------------------------------------------------------------------------
     // EventBus Unregister
     // ---------------------------------------------------------------------------------------------
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         eventBus.unregister(this);
         super.onStop();
     }

@@ -9,24 +9,25 @@ import java.util.ArrayList;
 import ua.ck.ghplayer.models.Track;
 import ua.ck.ghplayer.utils.ImageUtils;
 
-public class FavoriteTrackList {
+public class AlbumTrackList {
 
-    private static FavoriteTrackList instance;
-    private static ArrayList<Track> favoriteTrackList;
+    private static AlbumTrackList instance;
+    private static ArrayList<Track> albumTrackList;
+    private static ArrayList<Track> saveAlbumTrackList;
 
-    private FavoriteTrackList() {
+    private AlbumTrackList() {
     }
 
-    public static FavoriteTrackList getInstance() {
+    public static AlbumTrackList getInstance() {
         if (instance == null) {
-            instance = new FavoriteTrackList();
+            instance = new AlbumTrackList();
         }
         return instance;
     }
 
-    public void setFavoriteTrackList(Context context, Cursor cursor) {
+    public void setAlbumTrackList(Context context, Cursor cursor) {
         cursor.moveToFirst();
-        favoriteTrackList = new ArrayList<>();
+        albumTrackList = new ArrayList<>();
         do {
             // Get The Value Of Fields
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(Track.ID));
@@ -39,11 +40,21 @@ public class FavoriteTrackList {
 
             // Add Object To ArrayList
             Track track = new Track(id, title, artist, album, albumId, albumArt, duration);
-            favoriteTrackList.add(track);
+            albumTrackList.add(track);
         } while (cursor.moveToNext());
     }
 
-    public ArrayList<Track> getFavoriteTrackList() {
-        return favoriteTrackList != null ? favoriteTrackList : null;
+    public ArrayList<Track> getAlbumTrackList() {
+        return albumTrackList != null ? albumTrackList : null;
     }
+
+    public void saveAlbumTrackList() {
+        saveAlbumTrackList = new ArrayList<>();
+        saveAlbumTrackList.addAll(albumTrackList);
+    }
+
+    public ArrayList<Track> getSaveAlbumTrackList() {
+        return saveAlbumTrackList != null ? saveAlbumTrackList : null;
+    }
+
 }

@@ -16,10 +16,10 @@ public class Playlist {
 
     //Variables
     private String name;
-    private int id;
+    private long id;
 
 
-    public Playlist(int id, String name) {
+    public Playlist(long id, String name) {
         this.name = name;
         this.id = id;
     }
@@ -29,7 +29,7 @@ public class Playlist {
         this.name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.NAME));
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -3,6 +3,7 @@ package ua.ck.ghplayer.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +17,21 @@ import java.util.ArrayList;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.activities.ArtistInfoActivity;
-import ua.ck.ghplayer.interfaces.ItemClickFragmentSetter;
 import ua.ck.ghplayer.models.Artist;
 
 public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder> {
     private Context context;
     private ArrayList<Artist> data;
+    private Activity parentActivity;
 
     public ArtistListAdapter() {
         super();
     }
 
-    public void setData(Context context, ArrayList<Artist> data) {
+    public void setData(Context context, ArrayList<Artist> data, Activity parentActivity) {
         this.context = context;
         this.data = data;
+        this.parentActivity = parentActivity;
     }
 
     @Override
@@ -45,9 +47,9 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
 
         Picasso.with(context)
                 //.load(artist.getArtistArtUrl())
-                .load(R.drawable.bg_default_album_art)
-                .placeholder(R.drawable.bg_default_album_art)
-                .error(R.drawable.bg_default_album_art)
+                .load(R.drawable.album_cover_default)
+                .placeholder(R.drawable.album_cover_default)
+                .error(R.drawable.album_cover_default)
                 .into(holder.cover);
         holder.artist.setText(artist.getArtist());
         holder.numberOfAlbums.setText(String.valueOf(artist.getNumberOfAlbums()));
@@ -59,7 +61,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
         return data != null ? data.size() : 0;
     }
 
-    class ArtistViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ArtistViewHolder extends RecyclerView.ViewHolder {
         public ImageView cover;
         public TextView artist;
         public TextView numberOfAlbums;
@@ -72,22 +74,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Ar
             this.artist = (TextView) itemView.findViewById(R.id.item_artist_list_artist);
             this.numberOfAlbums = (TextView) itemView.findViewById(R.id.item_artist_list_number_of_albums);
             this.numberOfTracks = (TextView) itemView.findViewById(R.id.item_artist_list_number_of_tracks);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-            Artist artist = data.get(position);
-            /*//Delete
-            ItemClickFragmentSetter itemClick = (ItemClickFragmentSetter) context;
-            itemClick.onArtistListItemClick((int)artist.getId(),artist.getArtist());
-*/
-
-            Intent intent = new Intent(context,ArtistInfoActivity.class);
-            intent.putExtra("ARTIST_NAME",artist.getArtist());
-            intent.putExtra("ARTIST_ID",artist.getId());
-            context.startActivity(intent);
-        }
     }
 }
