@@ -129,10 +129,9 @@ public class Constants {
     public static final String PREFERENCES_KEY_SORT_TRACK_LIST = "sortTrackList";
 
     //----------------------------------------------------------------------------------------------
-    // Sorting
+    // Sorting TrackList
     //----------------------------------------------------------------------------------------------
 
-    // Sorting TrackList
     public static final int SORT_TRACK_LIST_ALBUM = 0;
     public static final int SORT_TRACK_LIST_ARTIST = 1;
     public static final int SORT_TRACK_LIST_TITLE = 2;

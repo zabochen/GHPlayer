@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.daimajia.swipe.util.Attributes;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import ua.ck.ghplayer.lists.CustomAlbumList;
 import ua.ck.ghplayer.models.Album;
 import ua.ck.ghplayer.utils.Constants;
 
-public class AlbumListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemClickListener {
+public class AlbumListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_ALBUM_LIST_LOADER = 2;
     private RecyclerView albumListRecyclerView;
     private AlbumListAdapter albumListAdapter;
@@ -62,11 +64,18 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
         albumListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         albumListRecyclerView.setHasFixedSize(true);
 
-        RecyclerViewTouchListener albumListTouchListener = new RecyclerViewTouchListener(getContext(), this, albumListRecyclerView);
-        albumListRecyclerView.addOnItemTouchListener(albumListTouchListener);
-
         albumListAdapter = new AlbumListAdapter();
+        albumListAdapter.setMode(Attributes.Mode.Single);
         albumListRecyclerView.setAdapter(albumListAdapter);
+
+        // RecyclerView - Set Scroll Listener
+        albumListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                albumListAdapter.mItemManger.closeAllItems();
+            }
+        });
 
     }
 
@@ -120,7 +129,7 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
-    @Override
+/*    @Override
     public void onClick(View view, int position) {
         if(getContext().getClass() == MainActivity.class) {
             EventBus.getDefault().post(new ShowTrackListActivity(Constants.ALBUM_TRACK_LIST_ID, position));
@@ -134,4 +143,5 @@ public class AlbumListFragment extends Fragment implements LoaderManager.LoaderC
     public void onLongClick(View view, int position) {
 
     }
+*/
 }

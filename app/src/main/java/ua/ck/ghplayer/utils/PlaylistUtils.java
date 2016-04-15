@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import ua.ck.ghplayer.loaders.CustomTrackListLoader;
@@ -108,20 +109,20 @@ public class PlaylistUtils {
     public static void AddAlbumTracksToFavorite(Context context, long albumId) {
         //Get all tracks from album
         Cursor albumTracksCursor = new CustomTrackListLoader(context, "ALBUM", albumId, null).loadInBackground();
-        Cursor favoriteTracksCursor = new FavoriteTrackListLoader(context).loadInBackground();
-        int trackPosition = favoriteTracksCursor.getCount();
 
         if (albumTracksCursor != null && albumTracksCursor.moveToFirst()) {
             albumTracksCursor.moveToFirst();
 
-            long trackId = albumTracksCursor.getLong(albumTracksCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+            long trackId;
 
             do {
+                trackId = albumTracksCursor.getLong(albumTracksCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 if (!isTrackInFavorite(context, trackId)) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, trackId);
-                    contentValues.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, ++trackPosition);
+                    contentValues.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, getLastFavoriteTrackPosition(context));
                     context.getContentResolver().insert(getFavoritePlaylistUri(), contentValues);
+
                 }
 
             } while (albumTracksCursor.moveToNext());
@@ -144,6 +145,21 @@ public class PlaylistUtils {
         } else {
             return false;
         }
+    }
+
+    private static int getLastFavoriteTrackPosition(Context context) {
+
+        String[] projection = new String[]{MediaStore.Audio.Playlists.Members.PLAY_ORDER};
+        String sortOrder = MediaStore.Audio.Playlists.Members.PLAY_ORDER + " DESC";
+
+        // Get Last Track Position
+        int trackPosition = 0;
+        Cursor cursor = context.getContentResolver().query(getFavoritePlaylistUri(), projection, null, null, sortOrder);
+        if (cursor != null && cursor.moveToFirst()) {
+            trackPosition = cursor.getInt(0) + 1;
+            cursor.close();
+        }
+        return trackPosition;
     }
 
 }

@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.FavoriteTrackListAdapter;
-import ua.ck.ghplayer.events.UpdateFavoriteTrackList;
+import ua.ck.ghplayer.events.UpdateFavoritesEvent;
 import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.loaders.FavoriteTrackListLoader;
 import ua.ck.ghplayer.utils.Constants;
@@ -66,16 +66,21 @@ public class FavoriteTrackListFragment extends Fragment implements LoaderManager
         trackListAdapter = new FavoriteTrackListAdapter();
         trackListAdapter.setMode(Attributes.Mode.Single);
         trackListRecyclerView.setAdapter(trackListAdapter);
+
+        // RecyclerView - Set Scroll Listener
+        trackListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                trackListAdapter.mItemManger.closeAllItems();
+            }
+        });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initLoader();
-    }
-
-    public void initLoader() {
-        // TrackList Loader
+        // Favorites TrackList Loader
         getLoaderManager().initLoader(Constants.FAVORITE_TRACK_LIST_LOADER_ID, null, this);
     }
 
@@ -97,7 +102,7 @@ public class FavoriteTrackListFragment extends Fragment implements LoaderManager
     }
 
     @Subscribe
-    public void onUpdateFavoriteTrackList(UpdateFavoriteTrackList event) {
+    public void onUpdateFavoritesEvent(UpdateFavoritesEvent event) {
         getLoaderManager().restartLoader(Constants.FAVORITE_TRACK_LIST_LOADER_ID, null, this);
     }
 

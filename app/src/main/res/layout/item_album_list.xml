@@ -1,85 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ghplayer="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_album_list_swipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+    ghplayer:leftEdgeSwipeOffset="0dp"
+    ghplayer:rightEdgeSwipeOffset="0dp">
+
+    <!-- Bottom View - Right To Left Swipe -->
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/item_album_list_bottom_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.github.siyamed.shapeimageview.RoundedImageView
-            android:id="@+id/item_album_list_cover"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:singleLine="false"
-            ghplayer:siBorderColor="@color/color_divider"
-            ghplayer:siBorderWidth="3dp"
-            ghplayer:siRadius="6dp"
-            ghplayer:siSquare="true" />
+        <!-- Button Cancel -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/item_album_list_button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/color_swipe_button_negative_background"
+            android:padding="20dp"
+            android:text="@string/item_track_list_swipe_button_cancel"
+            android:textColor="@color/color_swipe_button_title"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/item_album_list_album"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_item_track_list_text"
-                android:ellipsize="marquee"
-                android:singleLine="true"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+        <!-- Button Favorite -->
 
-            <TextView
-                android:id="@+id/item_album_list_artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:singleLine="true"
-                android:textColor="@color/color_item_track_list_text"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/item_album_list_number_of_songs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_item_track_list_text"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" tracks available"
-                    android:textColor="@color/color_item_track_list_text"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/item_album_list_button_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/color_swipe_button_positive_background"
+            android:padding="20dp"
+            android:text="@string/item_track_list_swipe_button_favorite"
+            android:textColor="@color/color_swipe_button_title"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-    <View style="@style/Divider" />
+    <!-- Top View - Item -->
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="?android:attr/selectableItemBackground">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.github.siyamed.shapeimageview.RoundedImageView
+                android:id="@+id/item_album_list_cover"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:singleLine="false"
+                ghplayer:siBorderColor="@color/color_divider"
+                ghplayer:siBorderWidth="3dp"
+                ghplayer:siRadius="6dp"
+                ghplayer:siSquare="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_album_list_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/item_album_list_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:textColor="@color/color_item_track_list_text"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/item_album_list_number_of_songs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_item_track_list_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" tracks available"
+                        android:textColor="@color/color_item_track_list_text"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View style="@style/Divider"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+
+
+
+</com.daimajia.swipe.SwipeLayout>

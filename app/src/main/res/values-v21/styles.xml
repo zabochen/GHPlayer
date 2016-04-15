@@ -3,6 +3,20 @@
 <resources>
 
     <!-- Notification -->
-    <style name="NotificationTextColor.Title" parent="@android:style/TextAppearance.Material.Notification.Title"/>
+    <style name="NotificationTextColor.Title" parent="@android:style/TextAppearance.Material.Notification.Title" />
+
+    <!-- Main AppTheme -->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="titleTextColor">@color/color_toolbar_title</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="subtitleTextColor">@color/color_toolbar_subtitle</item>
+        <item name="colorControlNormal">@color/color_control_normal</item>
+        <item name="android:windowBackground">@drawable/main_background</item>
+        <!-- Navigation View Item  -->
+        <item name="android:textColorSecondary">@color/color_toolbar_title</item>
+        <item name="alertDialogProTheme">@style/AppTheme.AlertDialogProTheme</item>
+    </style>
 
 </resources>

@@ -16,7 +16,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.events.StartMiniPlayerEvent;
-import ua.ck.ghplayer.events.UpdateFavoriteTrackList;
+import ua.ck.ghplayer.events.UpdateFavoritesEvent;
 import ua.ck.ghplayer.lists.FavoriteTrackList;
 import ua.ck.ghplayer.lists.TrackList;
 import ua.ck.ghplayer.utils.Constants;
@@ -82,11 +82,14 @@ public class FavoriteTrackListAdapter extends RecyclerSwipeAdapter<FavoriteTrack
                 mItemManger.removeShownLayouts(holder.swipeLayout);
                 notifyItemRemoved(position);
                 mItemManger.closeAllItems();
-                eventBus.post(new UpdateFavoriteTrackList());
+                if (FavoriteTrackList.getInstance().getFavoriteTrackList().size() == 1) {
+                    FavoriteTrackList.getInstance().getFavoriteTrackList().clear();
+                }
+                eventBus.post(new UpdateFavoritesEvent());
             }
         });
 
-        // Swipe Item Manager
+        // Swipe Item Manger
         mItemManger.bindView(holder.itemView, position);
     }
 

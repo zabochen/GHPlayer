@@ -19,7 +19,7 @@
     <string name="menu_fragments_sorting_dialog_button_descending">Descending</string>
 
     <!-- Swipe Layout Buttons -->
-    <string name="item_track_list_swipe_button_favorites">Favorites</string>
+    <string name="item_track_list_swipe_button_favorite">Favorite</string>
     <string name="item_favorites_track_list_swipe_button_delete">Delete</string>
     <string name="item_track_list_swipe_button_cancel">Cancel</string>
 

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.swipe.util.Attributes;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,10 +31,9 @@ import ua.ck.ghplayer.R;
 import ua.ck.ghplayer.adapters.GenreTrackListAdapter;
 import ua.ck.ghplayer.events.MiniPlayerButtonEvent;
 import ua.ck.ghplayer.events.NotificationPlayerEvent;
+import ua.ck.ghplayer.events.OnClickAdapterEvent;
 import ua.ck.ghplayer.events.UpdateProgressBarEvent;
 import ua.ck.ghplayer.events.UpdateTrackContentEvent;
-import ua.ck.ghplayer.interfaces.ItemClickListener;
-import ua.ck.ghplayer.listeners.RecyclerViewTouchListener;
 import ua.ck.ghplayer.lists.AlbumTrackList;
 import ua.ck.ghplayer.lists.ArtistTrackList;
 import ua.ck.ghplayer.lists.FavoriteTrackList;
@@ -46,7 +46,6 @@ import ua.ck.ghplayer.utils.Constants;
 
 public class GenreTrackListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        ItemClickListener,
         View.OnClickListener {
 
     private RecyclerView genreTrackListRecyclerView;
@@ -160,14 +159,19 @@ public class GenreTrackListActivity extends AppCompatActivity implements
         genreTrackListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         genreTrackListRecyclerView.setHasFixedSize(true);
 
-        // RecyclerView - Add TouchListener
-        RecyclerViewTouchListener genreTrackListListener = new RecyclerViewTouchListener(
-                getApplicationContext(), this, genreTrackListRecyclerView);
-        genreTrackListRecyclerView.addOnItemTouchListener(genreTrackListListener);
-
         // RecyclerView - Set Adapter
         genreTrackListAdapter = new GenreTrackListAdapter();
+        genreTrackListAdapter.setMode(Attributes.Mode.Single);
         genreTrackListRecyclerView.setAdapter(genreTrackListAdapter);
+
+        // RecyclerView - Set Scroll Listener
+        genreTrackListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                genreTrackListAdapter.mItemManger.closeAllItems();
+            }
+        });
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -244,7 +248,6 @@ public class GenreTrackListActivity extends AppCompatActivity implements
         }
     }
 
-
     // ---------------------------------------------------------------------------------------------
     // Loader GenreTrackList
     // ---------------------------------------------------------------------------------------------
@@ -275,29 +278,30 @@ public class GenreTrackListActivity extends AppCompatActivity implements
     // Click Listener
     // ---------------------------------------------------------------------------------------------
 
-    @Override
-    public void onClick(View view, int position) {
+    @Subscribe
+    public void onClickAdapterEvent(OnClickAdapterEvent event) {
+        if (event.getTrackListId() == Constants.GENRE_TRACK_LIST_ID) {
+            // Save Current Genre TrackList & Track Position
+            GenreTrackList.getInstance().saveGenreTrackList();
+            this.trackListId = Constants.GENRE_TRACK_LIST_ID;
+            this.trackPosition = event.getTrackPosition();
 
-        // Save Current Genre TrackList & Track Position
-        GenreTrackList.getInstance().saveGenreTrackList();
-        this.trackListId = Constants.GENRE_TRACK_LIST_ID;
-        this.trackPosition = position;
+            // Visible MiniPlayer & Set Content & Set Button Pause
+            if (miniPlayer.getVisibility() == View.GONE) {
+                setMiniPlayerGone(false);
+            }
+            setMiniPlayerTrackContent(Constants.GENRE_TRACK_LIST_ID, trackPosition);
+            setMiniPlayerButtonPauseActive();
 
-        // Visible MiniPlayer & Set Content & Set Button Pause
-        if (miniPlayer.getVisibility() == View.GONE) {
-            setMiniPlayerGone(false);
+            // Start MusicService
+            Intent musicServiceStartIntent = new Intent(getApplicationContext(), MusicService.class);
+            musicServiceStartIntent.putExtra(Constants.TRACK_LIST_ID_KEY, Constants.GENRE_TRACK_LIST_ID);
+            musicServiceStartIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, event.getTrackPosition());
+            startService(musicServiceStartIntent);
+
+            // Set Activity Result
+            setActivityResultIntent();
         }
-        setMiniPlayerTrackContent(Constants.GENRE_TRACK_LIST_ID, trackPosition);
-        setMiniPlayerButtonPauseActive();
-
-        // Start MusicService
-        Intent musicServiceStartIntent = new Intent(getApplicationContext(), MusicService.class);
-        musicServiceStartIntent.putExtra(Constants.TRACK_LIST_ID_KEY, Constants.GENRE_TRACK_LIST_ID);
-        musicServiceStartIntent.putExtra(Constants.MINI_PLAYER_TRACK_POSITION_KEY, position);
-        startService(musicServiceStartIntent);
-
-        // Set Activity Result
-        setActivityResultIntent();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -635,11 +639,6 @@ public class GenreTrackListActivity extends AppCompatActivity implements
                 buttonPlay.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
     }
 
     // ---------------------------------------------------------------------------------------------
